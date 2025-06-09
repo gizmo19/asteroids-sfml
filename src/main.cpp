@@ -22,7 +22,7 @@ int main() {
     std::srand(static_cast<unsigned>(std::time(nullptr)));
 
     sf::Texture backgroundTexture;
-    if (!backgroundTexture.loadFromFile("assets/images/pixelart_starfield.png")) {
+    if (!backgroundTexture.loadFromFile("assets/images/background.png")) {
         return 1;
     }
     sf::Sprite backgroundSprite(backgroundTexture);
@@ -39,7 +39,7 @@ int main() {
     constexpr float MAX_SHIP_SPEED = 12.f;
 
     sf::Texture shipTexture;
-    if (!shipTexture.loadFromFile("assets/images/space_fighter.png")) {
+    if (!shipTexture.loadFromFile("assets/images/ship.png")) {
         return 1;
     }
 

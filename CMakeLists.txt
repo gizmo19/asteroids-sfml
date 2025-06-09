@@ -21,10 +21,5 @@ target_link_libraries(main PRIVATE SFML::Graphics SFML::Audio)
 
 add_custom_command(TARGET main POST_BUILD
     COMMAND ${CMAKE_COMMAND} -E copy_directory
-    ${CMAKE_SOURCE_DIR}/levels
-    ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/levels)
-
-add_custom_command(TARGET main POST_BUILD
-    COMMAND ${CMAKE_COMMAND} -E copy_directory
     ${CMAKE_SOURCE_DIR}/assets
     ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/assets)
