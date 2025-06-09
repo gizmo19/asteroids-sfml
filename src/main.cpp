@@ -73,10 +73,51 @@ int main() {
         asteroids.push_back(a);
     }
 
+
     sf::Texture bulletTexture;
     if (!bulletTexture.loadFromFile("assets/images/bullet.png")) {
         return 1;
     }
+
+    const sf::Font font("assets/fonts/Jersey15-Regular.ttf");
+
+    sf::Text scoreText(font, "Score: 0", 44); // czcionka, tekst, rozmiar
+    scoreText.setFillColor(sf::Color::Yellow);
+    scoreText.setOutlineColor(sf::Color::Black);
+    scoreText.setOutlineThickness(3);
+    scoreText.setPosition({ 32.f, 16.f }); // mo¿na u¿yæ sf::Vector2f lub {x, y}
+
+
+    //napis game over
+    sf::Text gameOverText(font, "GAME OVER", 96); // 96px, du¿y napis
+    gameOverText.setFillColor(sf::Color::Red);
+    gameOverText.setOutlineColor(sf::Color::Black);
+    gameOverText.setOutlineThickness(6);
+    gameOverText.setPosition({ WIDTH / 2.f - 230.f, HEIGHT / 2.f - 200.f }); // mo¿na dostosowaæ
+
+    
+   
+    // Napis z autorami
+    sf::Text authorText(font, "by Dawid Nachlik i Mateusz Hajduczek", 44);
+    authorText.setFillColor(sf::Color::White);
+    authorText.setOutlineColor(sf::Color::Black);
+    authorText.setOutlineThickness(2);
+    authorText.setPosition({ WIDTH / 2.f - 330.f, HEIGHT / 2.f + 50.f }); // mo¿na dostosowaæ
+
+    // Tekst z iloœci¹ punktów
+    sf::Text finalScoreText(font, "", 56); // tekst ustawisz dynamicznie
+    finalScoreText.setFillColor(sf::Color::Yellow);
+    finalScoreText.setOutlineColor(sf::Color::Black);
+    finalScoreText.setOutlineThickness(3);
+    finalScoreText.setPosition({ WIDTH / 2.f - 130.f, HEIGHT / 2.f - 50.f });
+
+
+
+
+
+
+
+
 
     std::vector<GameObject> bullets;
     int score = 0;
@@ -182,6 +223,7 @@ int main() {
                 float dx = shipPos.x - a.pos.x, dy = shipPos.y - a.pos.y;
                 if (std::sqrt(dx * dx + dy * dy) < a.radius + 16.f) {
                     gameOver = true;
+                    finalScoreText.setString("Wynik: " + std::to_string(score));
                 }
             }
 
@@ -215,9 +257,15 @@ int main() {
             }
         }
 
+
+        scoreText.setString("Score: " + std::to_string(score));
+
+
         window.clear();
 
         window.draw(backgroundSprite);
+
+        window.draw(scoreText);
 
         shipSprite.setPosition(shipPos);
         shipSprite.setRotation(sf::degrees(shipAngle));
@@ -257,6 +305,9 @@ int main() {
             line.setPosition({ 0.f, static_cast<float>(HEIGHT - 8) });
             line.setFillColor(sf::Color::Red);
             window.draw(line);
+            window.draw(gameOverText);
+            window.draw(authorText);
+            window.draw(finalScoreText);
         }
 
         window.display();
