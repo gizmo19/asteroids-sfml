@@ -178,7 +178,9 @@ int main() {
             }
 
             static bool canShoot = true;
-            if (sf::Mouse::isButtonPressed(sf::Mouse::Button::Left)) {
+            bool shootPressed = sf::Mouse::isButtonPressed(sf::Mouse::Button::Left) || sf::Keyboard::isKeyPressed(sf::Keyboard::Scan::Space);
+
+            if (shootPressed) {
                 if (canShoot) {
                     GameObject b;
                     b.radius = 6.f;
