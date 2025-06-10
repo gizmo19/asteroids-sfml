@@ -1,42 +1,50 @@
 #pragma once
 #include "Scene.hpp"
+#include "../Actors/Actor.hpp"
+#include "../Actors/WeaponPickup.hpp"
 #include <SFML/Graphics.hpp>
+#include <SFML/System/Clock.hpp>
+#include <vector>
+#include <memory>
 
 class GameplayScene : public Scene {
 public:
-    GameplayScene();
     GameplayScene(sf::RenderWindow* window);
     void initialize() override;
     void update(float deltaTime) override;
     void render(sf::RenderWindow& window) override;
 
-    std::shared_ptr<Actor> createShip();
-    std::shared_ptr<Actor> createAsteroid();
-    std::shared_ptr<Actor> createBullet(sf::Vector2f position, sf::Vector2f direction, float angle);
-
-    std::vector<std::shared_ptr<Actor>>& getBullets() { return bullets; }
-    std::vector<std::shared_ptr<Actor>>& getAsteroids() { return asteroids; }
-    std::shared_ptr<Actor> getShip() { return ship; }
-
 private:
+    std::shared_ptr<Actor> ship;
+    std::vector<std::shared_ptr<Actor>> bullets;
+    std::vector<std::shared_ptr<Actor>> asteroids;
+    std::vector<std::shared_ptr<WeaponPickup>> weaponPickups;
+
     sf::Texture backgroundTexture;
     sf::Texture shipTexture;
     sf::Texture asteroidTexture;
     sf::Texture bulletTexture;
+    sf::Texture rifleTexture;
+    sf::Texture rocketTexture;
+    sf::Texture shotgunTexture;
     std::unique_ptr<sf::Sprite> backgroundSprite;
 
-    sf::RenderWindow* gameWindow;
-
-    std::shared_ptr<Actor> ship;
-    std::vector<std::shared_ptr<Actor>> bullets;
-    std::vector<std::shared_ptr<Actor>> asteroids;
+    sf::Clock weaponSpawnClock;
+    static constexpr float WEAPON_SPAWN_INTERVAL = 5.0f;
 
     int score;
     bool gameOver;
+    sf::RenderWindow* gameWindow;
 
     void loadTextures();
     void setupBackground();
+    std::shared_ptr<Actor> createShip();
+    std::shared_ptr<Actor> createAsteroid();
+    std::shared_ptr<Actor> createBullet(sf::Vector2f position, sf::Vector2f direction, float angle, WeaponType weaponType = WeaponType::Default);
+    std::shared_ptr<WeaponPickup> createWeaponPickup();
+
     void createInitialAsteroids();
     void spawnNewAsteroid();
+    void spawnWeaponPickup();
     void cleanupInactiveActors();
 };

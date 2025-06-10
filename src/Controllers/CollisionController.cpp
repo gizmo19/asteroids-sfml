@@ -4,11 +4,12 @@
 #include <cmath>
 #include <algorithm>
 
-CollisionController::CollisionController() : bullets(nullptr), asteroids(nullptr) {}
+CollisionController::CollisionController() : bullets(nullptr), asteroids(nullptr), weaponPickups(nullptr) {}
 
 void CollisionController::update(float deltaTime) {
     handleBulletAsteroidCollisions();
     handleShipAsteroidCollisions();
+    handleShipWeaponPickupCollisions();
 }
 
 void CollisionController::setShip(std::shared_ptr<Actor> ship) {
@@ -21,6 +22,10 @@ void CollisionController::setBullets(std::vector<std::shared_ptr<Actor>>* bullet
 
 void CollisionController::setAsteroids(std::vector<std::shared_ptr<Actor>>* asteroids) {
     this->asteroids = asteroids;
+}
+
+void CollisionController::setWeaponPickups(std::vector<std::shared_ptr<WeaponPickup>>* weaponPickups) {
+    this->weaponPickups = weaponPickups;
 }
 
 bool CollisionController::checkCollision(std::shared_ptr<Actor> a, std::shared_ptr<Actor> b) {
@@ -67,6 +72,25 @@ void CollisionController::handleShipAsteroidCollisions() {
             Message msg;
             msg.type = MessageType::GameOver;
             msg.sender = this;
+            MessageBus::publish(msg);
+            break;
+        }
+    }
+}
+
+void CollisionController::handleShipWeaponPickupCollisions() {
+    if (!ship || !weaponPickups) return;
+
+    for (auto& weaponPickup : *weaponPickups) {
+        if (!weaponPickup->active) continue;
+
+        if (checkCollision(ship, weaponPickup)) {
+            weaponPickup->active = false;
+
+            Message msg;
+            msg.type = MessageType::WeaponPickedUp;
+            msg.sender = this;
+            msg.payload = weaponPickup->getWeaponType();
             MessageBus::publish(msg);
             break;
         }
