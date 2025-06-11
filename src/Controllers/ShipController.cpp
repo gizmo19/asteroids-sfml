@@ -73,7 +73,8 @@ void ShipController::updateMovement(float deltaTime) {
 }
 
 void ShipController::handleShooting() {
-    if (sf::Mouse::isButtonPressed(sf::Mouse::Button::Left)) {
+    bool shootPressed = sf::Mouse::isButtonPressed(sf::Mouse::Button::Left) || sf::Keyboard::isKeyPressed(sf::Keyboard::Scan::Space);
+    if (shootPressed) {
         if (canShoot) {
             fireWeapon();
         }

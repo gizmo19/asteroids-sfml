@@ -20,6 +20,10 @@ private:
     std::vector<std::shared_ptr<Actor>> bullets;
     std::vector<std::shared_ptr<Actor>> asteroids;
     std::vector<std::shared_ptr<WeaponPickup>> weaponPickups;
+    /*sf::Font font;
+    sf::Text scoreText;*/
+    sf::Font font;
+    sf::Text text;
 
     sf::Texture backgroundTexture;
     sf::Texture shipTexture;

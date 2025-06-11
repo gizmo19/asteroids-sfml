@@ -15,12 +15,21 @@
 #include <ctime>
 #include <cmath>
 #include <algorithm>
+#include <string>
+#include <sstream>
 
-GameplayScene::GameplayScene(sf::RenderWindow* window) : score(0), gameOver(false), gameWindow(window) {
+GameplayScene::GameplayScene(sf::RenderWindow* window) : score(0), gameOver(false), gameWindow(window), text(sf::Text(font)) {
     std::srand(static_cast<unsigned>(std::time(nullptr)));
 }
 
+
 void GameplayScene::initialize() {
+
+    if (!font.openFromFile("assets/fonts/jersey.ttf")) {
+        return;
+    }
+    sf::Text text(font);
+
     loadTextures();
     setupBackground();
 
@@ -96,7 +105,12 @@ void GameplayScene::render(sf::RenderWindow& window) {
         window.draw(line);
     }
 
-    explosionController->render(window);
+    text.setCharacterSize(48);
+    text.setOutlineThickness(3);
+    text.setPosition({ 32.f, 16.f });
+    text.setFillColor(sf::Color::Yellow);
+    text.setString("Score: " + std::to_string(score));
+    window.draw(text);
 }
 
 std::shared_ptr<Actor> GameplayScene::createShip() {
