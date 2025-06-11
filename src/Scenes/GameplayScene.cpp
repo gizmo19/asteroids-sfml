@@ -21,7 +21,7 @@
 #include <string>
 #include <sstream>
 
-GameplayScene::GameplayScene(Core* core, sf::RenderWindow* window) : core(core), score(0), gameOver(false), gameWindow(window), text(sf::Text(font)) {
+GameplayScene::GameplayScene(Core* core, sf::RenderWindow* window) : core(core), score(0), gameOver(false), gameWindow(window), text(sf::Text(font)){
     std::srand(static_cast<unsigned>(std::time(nullptr)));
 }
 
@@ -80,8 +80,9 @@ void GameplayScene::initialize() {
     MessageBus::subscribe(MessageType::GameOver, [this](const Message& msg) {
         if (!gameOver) {
             gameOver = true;
-            core->switchToGameOverScene(score);
+          
             float survivalTime = gameTimer.getElapsedTime().asSeconds();
+            core->switchToGameOverScene(score, survivalTime);
             printf("\n=== GAME OVER ===\n");
             printf("You survived for: %.2f seconds\n", survivalTime);
             printf("Final score: %d\n", score);

@@ -13,7 +13,7 @@ public:
     void run();
     void addScene(std::shared_ptr<Scene> scene);
     void setActiveScene(size_t index);
-    void switchToGameOverScene(int score);
+    void switchToGameOverScene(int score,float survivalTime);
     sf::RenderWindow& getWindow();
     float getDeltaTime() const;
 

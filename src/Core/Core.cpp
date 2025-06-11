@@ -88,8 +88,8 @@ void Core::render() {
 
     window.display();
 }
-void Core::switchToGameOverScene(int score) {
-    auto gameOverScene = std::make_shared<GameOverScene>(&window, score);
+void Core::switchToGameOverScene(int score, float survivalTime) {
+    auto gameOverScene = std::make_shared<GameOverScene>(&window, score, survivalTime);
     activeScene = gameOverScene;
     activeScene->setWindow(&window);
     activeScene->initialize();
