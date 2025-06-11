@@ -8,6 +8,17 @@
 #include <cmath>
 #include <algorithm>
 
+std::string weaponTypeToString(WeaponType type) {
+    switch (type) {
+    case WeaponType::Rifle: return "Rifle";
+    case WeaponType::Shotgun: return "Shotgun";
+    case WeaponType::Revolver: return "Revolver";
+    case WeaponType::Flamethrower: return "Flamethrower";
+    case WeaponType::RocketLauncher: return "Rocket Launcher";
+    default: return "Unknown";
+    }
+}
+
 CollisionController::CollisionController() : bullets(nullptr), asteroids(nullptr), weaponPickups(nullptr) {}
 
 void CollisionController::update(float deltaTime) {
@@ -117,6 +128,9 @@ void CollisionController::handleShipWeaponPickupCollisions() {
 
         if (checkCollision(ship, weaponPickup)) {
             weaponPickup->active = false;
+
+            WeaponType weaponType = weaponPickup->getWeaponType();
+            printf("Weapon picked up: %s\n", weaponTypeToString(weaponType).c_str());
 
             Message msg;
             msg.type = MessageType::WeaponPickedUp;
