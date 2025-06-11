@@ -115,6 +115,8 @@ void GameplayScene::render(sf::RenderWindow& window) {
     }
     Scene::render(window);
 
+    explosionController->render(window);
+
     if (gameOver) {
         sf::RectangleShape line(sf::Vector2f(Constants::WINDOW_WIDTH, Constants::GAME_OVER_LINE_HEIGHT));
         line.setPosition({ 0.0f, Constants::GAME_OVER_LINE_Y });
