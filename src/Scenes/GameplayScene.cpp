@@ -9,6 +9,7 @@
 #include "../../include/Utils/MessageBus.hpp"
 #include "../../include/Utils/WeaponSystem.hpp"
 #include "../../include/Utils/MessageData.hpp"
+#include "../../include/Utils/Constants.hpp"
 #include <cstdlib>
 #include <ctime>
 #include <cmath>
@@ -37,11 +38,11 @@ void GameplayScene::initialize() {
     MessageBus::subscribe(MessageType::BulletFired, [this](const Message& msg) {
         BulletData data = std::any_cast<BulletData>(msg.payload);
 
-        float angleRad = (data.angle - 90.0f) * 3.14159f / 180.0f;
+        float angleRad = (data.angle - Constants::BULLET_ANGLE_OFFSET) * Constants::DEGREES_TO_RADIANS;
         sf::Vector2f direction(std::cos(angleRad), std::sin(angleRad));
 
         auto bullet = createBullet(data.position, direction, data.angle, data.weaponType);
-        bullet->velocity = direction * data.speed + ship->velocity * 0.5f;
+        bullet->velocity = direction * data.speed + ship->velocity * Constants::BULLET_VELOCITY_INFLUENCE;
         bullets.push_back(bullet);
         addActor(bullet);
         });
@@ -62,7 +63,7 @@ void GameplayScene::update(float deltaTime) {
 
     Scene::update(deltaTime);
 
-    if (weaponSpawnClock.getElapsedTime().asSeconds() > WEAPON_SPAWN_INTERVAL) {
+    if (weaponSpawnClock.getElapsedTime().asSeconds() > Constants::WEAPON_SPAWN_INTERVAL) {
         spawnWeaponPickup();
         weaponSpawnClock.restart();
     }
@@ -70,7 +71,7 @@ void GameplayScene::update(float deltaTime) {
     Scene::cleanupInactiveActors();
     cleanupInactiveActors();
 
-    while (asteroids.size() < 12) {
+    while (asteroids.size() < Constants::MIN_ASTEROID_COUNT) {
         spawnNewAsteroid();
     }
 }
@@ -82,8 +83,8 @@ void GameplayScene::render(sf::RenderWindow& window) {
     Scene::render(window);
 
     if (gameOver) {
-        sf::RectangleShape line(sf::Vector2f(1600, 8));
-        line.setPosition({ 0.0f, 1192.0f });
+        sf::RectangleShape line(sf::Vector2f(Constants::WINDOW_WIDTH, Constants::GAME_OVER_LINE_HEIGHT));
+        line.setPosition({ 0.0f, Constants::GAME_OVER_LINE_Y });
         line.setFillColor(sf::Color::Red);
         window.draw(line);
     }
@@ -91,8 +92,8 @@ void GameplayScene::render(sf::RenderWindow& window) {
 
 std::shared_ptr<Actor> GameplayScene::createShip() {
     auto actor = std::make_shared<Actor>();
-    actor->position = { 800.0f, 1160.0f };
-    actor->radius = 16.0f;
+    actor->position = { Constants::SHIP_START_X, Constants::SHIP_START_Y };
+    actor->radius = Constants::SHIP_RADIUS;
 
     actor->setTexture(shipTexture);
     sf::Vector2u size = shipTexture.getSize();
@@ -107,20 +108,20 @@ std::shared_ptr<Actor> GameplayScene::createShip() {
 
 std::shared_ptr<Actor> GameplayScene::createAsteroid() {
     auto actor = std::make_shared<Actor>();
-    actor->radius = 20.0f + std::rand() % 25;
+    actor->radius = Constants::MIN_ASTEROID_RADIUS + std::rand() % Constants::ASTEROID_RADIUS_RANGE;
     actor->position = {
-        static_cast<float>(std::rand() % (1600 - 40) + 20),
+        static_cast<float>(std::rand() % (Constants::WINDOW_WIDTH - Constants::ASTEROID_SPAWN_MARGIN) + Constants::ASTEROID_SPAWN_MIN_X),
         -actor->radius
     };
     actor->velocity = {
-        (static_cast<float>(std::rand() % 200) - 100.0f) / 50.0f,
-        2.0f + static_cast<float>(std::rand() % 15) / 3.0f
+        (static_cast<float>(std::rand() % Constants::ASTEROID_VELOCITY_RANGE) - 100.0f) / Constants::ASTEROID_VELOCITY_DIVISOR,
+        Constants::BASE_ASTEROID_SPEED + static_cast<float>(std::rand() % Constants::ASTEROID_SPEED_RANGE) / Constants::ASTEROID_SPEED_DIVISOR
     };
 
     actor->setTexture(asteroidTexture);
     sf::Vector2u size = asteroidTexture.getSize();
     actor->setOrigin(sf::Vector2f(size.x / 2.0f, size.y / 2.0f));
-    float scale = (actor->radius * 2.0f) / static_cast<float>(size.x);
+    float scale = (actor->radius * Constants::ASTEROID_SCALE_MULTIPLIER) / static_cast<float>(size.x);
     actor->setScale({ scale, scale });
 
     auto controller = std::make_shared<AsteroidController>();
@@ -131,14 +132,14 @@ std::shared_ptr<Actor> GameplayScene::createAsteroid() {
 
 std::shared_ptr<Actor> GameplayScene::createBullet(sf::Vector2f position, sf::Vector2f direction, float angle, WeaponType weaponType) {
     auto actor = std::make_shared<Actor>();
-    actor->radius = 6.0f;
-    actor->position = position + direction * 28.0f;
+    actor->radius = Constants::BULLET_RADIUS;
+    actor->position = position + direction * Constants::BULLET_POSITION_OFFSET;
     actor->rotation = angle;
 
     actor->setTexture(bulletTexture);
     sf::Vector2u size = bulletTexture.getSize();
     actor->setOrigin(sf::Vector2f(size.x / 2.0f, size.y / 2.0f));
-    float scale = (actor->radius * 8.0f) / static_cast<float>(size.x);
+    float scale = (actor->radius * Constants::BULLET_SCALE_MULTIPLIER) / static_cast<float>(size.x);
     actor->setScale({ scale, scale });
 
     sf::Color weaponColor;
@@ -169,8 +170,8 @@ std::shared_ptr<WeaponPickup> GameplayScene::createWeaponPickup() {
     auto weaponPickup = std::make_shared<WeaponPickup>(weaponType);
 
     weaponPickup->position = {
-        static_cast<float>(std::rand() % (1600 - 100) + 50),
-        static_cast<float>(std::rand() % (1000 - 200) + 100)
+        static_cast<float>(std::rand() % (Constants::WINDOW_WIDTH - Constants::WEAPON_SPAWN_MARGIN * 2) + Constants::WEAPON_SPAWN_MARGIN),
+        static_cast<float>(std::rand() % (Constants::WEAPON_SPAWN_HEIGHT_MAX - Constants::WEAPON_SPAWN_HEIGHT_MIN) + Constants::WEAPON_SPAWN_HEIGHT_MIN)
     };
 
     sf::Texture* selectedTexture;
@@ -198,7 +199,7 @@ std::shared_ptr<WeaponPickup> GameplayScene::createWeaponPickup() {
     weaponPickup->setTexture(*selectedTexture);
     sf::Vector2u size = selectedTexture->getSize();
     weaponPickup->setOrigin(sf::Vector2f(size.x / 2.0f, size.y / 2.0f));
-    weaponPickup->setScale({ 2.0f, 2.0f });
+    weaponPickup->setScale({ Constants::WEAPON_SCALE, Constants::WEAPON_SCALE });
 
     auto controller = std::make_shared<WeaponPickupController>();
     weaponPickup->addController(controller);
@@ -206,31 +207,18 @@ std::shared_ptr<WeaponPickup> GameplayScene::createWeaponPickup() {
     return weaponPickup;
 }
 
-void GameplayScene::loadTextures() {
-    backgroundTexture.loadFromFile("assets/images/background.png");
-    shipTexture.loadFromFile("assets/images/ship.png");
-    asteroidTexture.loadFromFile("assets/images/asteroid.png");
-    bulletTexture.loadFromFile("assets/images/bullet.png");
-
-    rifleTexture.loadFromFile("assets/images/rifle.png");
-    shotgunTexture.loadFromFile("assets/images/shotgun.png");
-	revolverTexture.loadFromFile("assets/images/revolver.png");
-	flamethrowerTexture.loadFromFile("assets/images/flamethrower.png");
-    rocketLauncherTexture.loadFromFile("assets/images/rocket_launcher.png");
-}
-
 void GameplayScene::setupBackground() {
     backgroundSprite = std::make_unique<sf::Sprite>(backgroundTexture);
     backgroundSprite->setScale({
-        1600.0f / backgroundTexture.getSize().x,
-        1200.0f / backgroundTexture.getSize().y
+        Constants::WINDOW_WIDTH / static_cast<float>(backgroundTexture.getSize().x),
+        Constants::WINDOW_HEIGHT / static_cast<float>(backgroundTexture.getSize().y)
         });
 }
 
 void GameplayScene::createInitialAsteroids() {
-    for (int i = 0; i < 12; ++i) {
+    for (int i = 0; i < Constants::INITIAL_ASTEROID_COUNT; ++i) {
         auto asteroid = createAsteroid();
-        asteroid->position.y = static_cast<float>(-std::rand() % 2400);
+        asteroid->position.y = static_cast<float>(-std::rand() % Constants::MAX_ASTEROID_SPAWN_OFFSET);
         asteroids.push_back(asteroid);
         addActor(asteroid);
     }
@@ -257,4 +245,17 @@ void GameplayScene::cleanupInactiveActors() {
 
     weaponPickups.erase(std::remove_if(weaponPickups.begin(), weaponPickups.end(),
         [](const std::shared_ptr<WeaponPickup>& actor) { return !actor->active; }), weaponPickups.end());
+}
+
+void GameplayScene::loadTextures() {
+    backgroundTexture.loadFromFile("assets/images/background.png");
+    shipTexture.loadFromFile("assets/images/ship.png");
+    asteroidTexture.loadFromFile("assets/images/asteroid.png");
+    bulletTexture.loadFromFile("assets/images/bullet.png");
+
+    rifleTexture.loadFromFile("assets/images/rifle.png");
+    shotgunTexture.loadFromFile("assets/images/shotgun.png");
+    revolverTexture.loadFromFile("assets/images/revolver.png");
+    flamethrowerTexture.loadFromFile("assets/images/flamethrower.png");
+    rocketLauncherTexture.loadFromFile("assets/images/rocket_launcher.png");
 }

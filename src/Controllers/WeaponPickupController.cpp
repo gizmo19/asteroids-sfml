@@ -1,5 +1,6 @@
 #include "../../include/Controllers/WeaponPickupController.hpp"
 #include "../../include/Actors/Actor.hpp"
+#include "../../include/Utils/Constants.hpp"
 #include <cmath>
 
 WeaponPickupController::WeaponPickupController() : isOriginalYSet(false), originalY(0.0f) {}
@@ -17,12 +18,12 @@ void WeaponPickupController::updateBobbing() {
         isOriginalYSet = true;
     }
 
-    float bobOffset = std::sin(bobClock.getElapsedTime().asSeconds() * BOB_SPEED) * BOB_AMPLITUDE;
+    float bobOffset = std::sin(bobClock.getElapsedTime().asSeconds() * Constants::BOB_SPEED) * Constants::BOB_AMPLITUDE;
     attachedActor->position.y = originalY + bobOffset;
 }
 
 void WeaponPickupController::checkLifetime() {
-    if (lifetimeClock.getElapsedTime().asSeconds() > MAX_LIFETIME) {
+    if (lifetimeClock.getElapsedTime().asSeconds() > Constants::MAX_LIFETIME) {
         attachedActor->active = false;
     }
 }

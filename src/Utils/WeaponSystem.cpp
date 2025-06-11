@@ -1,10 +1,19 @@
 #include "../../include/Utils/WeaponSystem.hpp"
+#include "../../include/Utils/Constants.hpp"
 #include <random>
+
+const std::vector<WeaponRarityItem> WeaponSystem::rarityTable = {
+    { WeaponType::Rifle, Constants::RIFLE_SPAWN_RATE },
+    { WeaponType::Revolver, Constants::REVOLVER_SPAWN_RATE },
+    { WeaponType::Shotgun, Constants::SHOTGUN_SPAWN_RATE },
+    { WeaponType::RocketLauncher, Constants::ROCKET_SPAWN_RATE },
+    { WeaponType::Flamethrower, Constants::FLAMETHROWER_SPAWN_RATE }
+};
 
 WeaponStats WeaponSystem::getWeaponStats(WeaponType type) {
     switch (type) {
     case WeaponType::Rifle:
-        return { 0.001f, 1, 0.0f, 12.0f, 8.0f, 1.0f }; // fireRate, bulletCount, spreadAngle, bulletSpeed, duration, playerSpeed
+        return { 0.001f, 1, 0.0f, 12.0f, 8.0f, 1.0f };
     case WeaponType::Revolver:
         return { 1.0f, 1, 0.0f, 8.0f, 10.0f, 1.5f };
     case WeaponType::Shotgun:
@@ -21,9 +30,29 @@ WeaponStats WeaponSystem::getWeaponStats(WeaponType type) {
 WeaponType WeaponSystem::getRandomWeaponType() {
     static std::random_device rd;
     static std::mt19937 gen(rd());
-    static std::uniform_int_distribution<> dis(1, 5);
+    static std::uniform_real_distribution<float> dis(0.0f, getTotalWeight());
 
-    return static_cast<WeaponType>(dis(gen));
+    float randomValue = dis(gen);
+    float currentWeight = 0.0f;
+
+    for (const auto& item : rarityTable) {
+        currentWeight += item.weight;
+        if (randomValue <= currentWeight) {
+            return item.type;
+        }
+    }
+
+    return WeaponType::Rifle;
+}
+
+float WeaponSystem::getTotalWeight() {
+    static float totalWeight = 0.0f;
+    if (totalWeight == 0.0f) {
+        for (const auto& item : rarityTable) {
+            totalWeight += item.weight;
+        }
+    }
+    return totalWeight;
 }
 
 std::string WeaponSystem::getWeaponTexture(WeaponType type) {
