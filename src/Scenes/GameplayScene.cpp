@@ -61,7 +61,8 @@ void GameplayScene::initialize() {
         });
 
     MessageBus::subscribe(MessageType::GameOver, [this](const Message& msg) {
-        core->switchToGameOverScene();
+        core->switchToGameOverScene(score);
+
       });
 }
 
