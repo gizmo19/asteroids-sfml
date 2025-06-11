@@ -1,10 +1,18 @@
 #pragma once
-#include <SFML/System/Vector2.hpp>
-#include "../Actors/WeaponPickup.hpp"
+#include <SFML/Graphics.hpp>
+#include <any>
+
+enum class WeaponType;
 
 struct BulletData {
     sf::Vector2f position;
     float angle;
     float speed;
+    WeaponType weaponType;
+};
+
+struct ExplosionData {
+    sf::Vector2f position;
+    float radius;
     WeaponType weaponType;
 };

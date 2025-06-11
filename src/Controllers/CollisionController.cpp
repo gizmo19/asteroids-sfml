@@ -1,6 +1,8 @@
 #include "../../include/Controllers/CollisionController.hpp"
 #include "../../include/Actors/Actor.hpp"
 #include "../../include/Utils/MessageBus.hpp"
+#include "../../include/Controllers/BulletController.hpp"
+#include "../../include/Utils/MessageData.hpp"
 #include <cmath>
 #include <algorithm>
 
@@ -41,22 +43,41 @@ bool CollisionController::checkCollision(std::shared_ptr<Actor> a, std::shared_p
 void CollisionController::handleBulletAsteroidCollisions() {
     if (!bullets || !asteroids) return;
 
-    for (auto& bullet : *bullets) {
-        if (!bullet->active) continue;
+    auto bulletsCopy = *bullets;
+    auto asteroidsCopy = *asteroids;
 
-        for (auto& asteroid : *asteroids) {
-            if (!asteroid->active) continue;
+    for (auto& bullet : bulletsCopy) {
+        if (!bullet || !bullet->active) continue;
+
+        for (auto& asteroid : asteroidsCopy) {
+            if (!asteroid || !asteroid->active) continue;
 
             if (checkCollision(bullet, asteroid)) {
+                WeaponType bulletWeaponType = bullet->weaponType;
+
                 bullet->active = false;
+
+                if (bulletWeaponType == WeaponType::RocketLauncher) {
+                    Message explosionMsg;
+                    explosionMsg.type = MessageType::ExplosionTriggered;
+                    explosionMsg.sender = this;
+
+                    ExplosionData explosionData;
+                    explosionData.position = asteroid->position;
+                    explosionData.radius = 100.0f;
+                    explosionData.weaponType = WeaponType::RocketLauncher;
+
+                    explosionMsg.payload = explosionData;
+                    MessageBus::publish(explosionMsg);
+                }
+
                 asteroid->active = false;
 
-                Message msg;
-                msg.type = MessageType::AsteroidDestroyed;
-                msg.sender = this;
-                msg.payload = 10;
-                MessageBus::publish(msg);
-                break;
+                Message destroyMsg;
+                destroyMsg.type = MessageType::AsteroidDestroyed;
+                destroyMsg.sender = this;
+                destroyMsg.payload = 100;
+                MessageBus::publish(destroyMsg);
             }
         }
     }

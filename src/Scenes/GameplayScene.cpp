@@ -6,6 +6,7 @@
 #include "../../include/Controllers/BulletController.hpp"
 #include "../../include/Controllers/WeaponPickupController.hpp"
 #include "../../include/Controllers/CollisionController.hpp"
+#include "../../include/Controllers/ExplosionController.hpp"
 #include "../../include/Utils/MessageBus.hpp"
 #include "../../include/Utils/WeaponSystem.hpp"
 #include "../../include/Utils/MessageData.hpp"
@@ -34,6 +35,10 @@ void GameplayScene::initialize() {
     collisionController->setAsteroids(&asteroids);
     collisionController->setWeaponPickups(&weaponPickups);
     addController(collisionController);
+
+    auto explosionController = std::make_shared<ExplosionController>();
+    explosionController->setAsteroids(&asteroids);
+    addController(explosionController);
 
     MessageBus::subscribe(MessageType::BulletFired, [this](const Message& msg) {
         BulletData data = std::any_cast<BulletData>(msg.payload);
@@ -135,12 +140,19 @@ std::shared_ptr<Actor> GameplayScene::createBullet(sf::Vector2f position, sf::Ve
     actor->radius = Constants::BULLET_RADIUS;
     actor->position = position + direction * Constants::BULLET_POSITION_OFFSET;
     actor->rotation = angle;
+    actor->weaponType = weaponType;
 
     actor->setTexture(bulletTexture);
     sf::Vector2u size = bulletTexture.getSize();
     actor->setOrigin(sf::Vector2f(size.x / 2.0f, size.y / 2.0f));
     float scale = (actor->radius * Constants::BULLET_SCALE_MULTIPLIER) / static_cast<float>(size.x);
-    actor->setScale({ scale, scale });
+
+    if (weaponType == WeaponType::RocketLauncher) {
+        actor->setScale({ scale * 2, scale * 2 });
+    }
+    else {
+        actor->setScale({ scale, scale });
+    }
 
     sf::Color weaponColor;
     switch (weaponType) {
@@ -153,13 +165,16 @@ std::shared_ptr<Actor> GameplayScene::createBullet(sf::Vector2f position, sf::Ve
     case WeaponType::Shotgun:
         weaponColor = sf::Color::Green;
         break;
+    case WeaponType::RocketLauncher:
+        weaponColor = sf::Color::Magenta;
+        break;
     default:
         weaponColor = sf::Color::White;
         break;
     }
     actor->getSprite()->setColor(weaponColor);
 
-    auto controller = std::make_shared<BulletController>();
+    auto controller = std::make_shared<BulletController>(weaponType);
     actor->addController(controller);
 
     return actor;

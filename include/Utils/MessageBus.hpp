@@ -11,7 +11,9 @@ enum class MessageType {
     GameOver,
     ScoreUpdate,
     WeaponPickedUp,
-    WeaponExpired
+    WeaponExpired,
+    RocketExplosion,
+    ExplosionTriggered
 };
 
 struct Message {
