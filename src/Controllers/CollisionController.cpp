@@ -66,11 +66,15 @@ void CollisionController::handleBulletAsteroidCollisions() {
 
                     ExplosionData explosionData;
                     explosionData.position = asteroid->position;
-                    explosionData.radius = 100.0f;
+                    explosionData.radius = Constants::EXPLOSION_RADIUS;
                     explosionData.weaponType = WeaponType::RocketLauncher;
 
                     explosionMsg.payload = explosionData;
                     MessageBus::publish(explosionMsg);
+                    AudioManager::getInstance().playSound(Constants::Audio::EXPLOSION_SOUND_PATH);
+                }
+                else {
+                    AudioManager::getInstance().playSound(Constants::Audio::DESTRUCTION_SOUND_PATH);
                 }
 
                 asteroid->active = false;
@@ -80,7 +84,6 @@ void CollisionController::handleBulletAsteroidCollisions() {
                 destroyMsg.sender = this;
                 destroyMsg.payload = 100;
                 MessageBus::publish(destroyMsg);
-                AudioManager::getInstance().playSound(Constants::Audio::DESTRUCTION_SOUND_PATH);
                 break;
             }
         }
@@ -94,6 +97,9 @@ void CollisionController::handleShipAsteroidCollisions() {
         if (!asteroid->active) continue;
 
         if (checkCollision(ship, asteroid)) {
+			AudioManager::getInstance().playSound(Constants::Audio::DEATH_SOUND_PATH);
+			AudioManager::getInstance().stopMusic();
+
             Message msg;
             msg.type = MessageType::GameOver;
             msg.sender = this;
