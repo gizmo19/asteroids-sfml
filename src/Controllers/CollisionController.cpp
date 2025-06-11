@@ -93,7 +93,7 @@ void CollisionController::handleBulletAsteroidCollisions() {
                 Message destroyMsg;
                 destroyMsg.type = MessageType::AsteroidDestroyed;
                 destroyMsg.sender = this;
-                destroyMsg.payload = 100;
+                destroyMsg.payload = Constants::ASTEROID_SCORE_POINTS;
                 MessageBus::publish(destroyMsg);
                 break;
             }
