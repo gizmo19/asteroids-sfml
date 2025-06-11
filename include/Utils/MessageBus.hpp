@@ -13,7 +13,12 @@ enum class MessageType {
     WeaponPickedUp,
     WeaponExpired,
     RocketExplosion,
-    ExplosionTriggered
+    ExplosionTriggered,
+    PlayMusic,
+    StopMusic,
+    PauseMusic,
+    ResumeMusic,
+    PlaySound
 };
 
 struct Message {
