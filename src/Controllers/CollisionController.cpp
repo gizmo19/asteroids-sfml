@@ -3,6 +3,8 @@
 #include "../../include/Utils/MessageBus.hpp"
 #include "../../include/Controllers/BulletController.hpp"
 #include "../../include/Utils/MessageData.hpp"
+#include "../../include/Utils/AudioManager.hpp"
+#include "../../include/Utils/Constants.hpp"
 #include <cmath>
 #include <algorithm>
 
@@ -78,6 +80,8 @@ void CollisionController::handleBulletAsteroidCollisions() {
                 destroyMsg.sender = this;
                 destroyMsg.payload = 100;
                 MessageBus::publish(destroyMsg);
+                AudioManager::getInstance().playSound(Constants::Audio::DESTRUCTION_SOUND_PATH);
+                break;
             }
         }
     }
