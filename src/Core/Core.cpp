@@ -1,6 +1,7 @@
 #include "../../include/Core/Core.hpp"
 #include "../../include/Scenes/Scene.hpp"
 #include "../../include/Scenes/GameOverScene.hpp"
+
 Core::Core() : window(sf::VideoMode({ 1600, 1200 }), "Asteroids SFML"), deltaTime(0.0f) {
     window.setFramerateLimit(60);
 }
@@ -14,6 +15,28 @@ void Core::run() {
         handleEvents();
         update();
         render();
+    }
+}
+
+float Core::getGameTime() const {
+    return gameStarted ? gameTimer.getElapsedTime().asSeconds() : 0.0f;
+}
+
+void Core::startGameTimer() {
+    if (!gameStarted) {
+        gameTimer.restart();
+        gameStarted = true;
+        printf("Game timer started!\n");
+    }
+}
+
+void Core::stopGameTimer() {
+    if (gameStarted) {
+        float finalTime = gameTimer.getElapsedTime().asSeconds();
+        gameStarted = false;
+        printf("=== GAME OVER ===\n");
+        printf("Survival time: %.2f seconds (%.1f minutes)\n", finalTime, finalTime / 60.0f);
+        printf("================\n");
     }
 }
 

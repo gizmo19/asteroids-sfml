@@ -3,8 +3,21 @@
 #include "../../include/Utils/MessageBus.hpp"
 #include "../../include/Controllers/BulletController.hpp"
 #include "../../include/Utils/MessageData.hpp"
+#include "../../include/Utils/AudioManager.hpp"
+#include "../../include/Utils/Constants.hpp"
 #include <cmath>
 #include <algorithm>
+
+std::string weaponTypeToString(WeaponType type) {
+    switch (type) {
+    case WeaponType::Rifle: return "Rifle";
+    case WeaponType::Shotgun: return "Shotgun";
+    case WeaponType::Revolver: return "Revolver";
+    case WeaponType::Flamethrower: return "Flamethrower";
+    case WeaponType::RocketLauncher: return "Rocket Launcher";
+    default: return "Unknown";
+    }
+}
 
 CollisionController::CollisionController() : bullets(nullptr), asteroids(nullptr), weaponPickups(nullptr) {}
 
@@ -64,11 +77,15 @@ void CollisionController::handleBulletAsteroidCollisions() {
 
                     ExplosionData explosionData;
                     explosionData.position = asteroid->position;
-                    explosionData.radius = 100.0f;
+                    explosionData.radius = Constants::EXPLOSION_RADIUS;
                     explosionData.weaponType = WeaponType::RocketLauncher;
 
                     explosionMsg.payload = explosionData;
                     MessageBus::publish(explosionMsg);
+                    AudioManager::getInstance().playSound(Constants::Audio::EXPLOSION_SOUND_PATH);
+                }
+                else {
+                    AudioManager::getInstance().playSound(Constants::Audio::DESTRUCTION_SOUND_PATH);
                 }
 
                 asteroid->active = false;
@@ -76,8 +93,9 @@ void CollisionController::handleBulletAsteroidCollisions() {
                 Message destroyMsg;
                 destroyMsg.type = MessageType::AsteroidDestroyed;
                 destroyMsg.sender = this;
-                destroyMsg.payload = 100;
+                destroyMsg.payload = Constants::ASTEROID_SCORE_POINTS;
                 MessageBus::publish(destroyMsg);
+                break;
             }
         }
     }
@@ -90,6 +108,9 @@ void CollisionController::handleShipAsteroidCollisions() {
         if (!asteroid->active) continue;
 
         if (checkCollision(ship, asteroid)) {
+			AudioManager::getInstance().playSound(Constants::Audio::DEATH_SOUND_PATH);
+			AudioManager::getInstance().stopMusic();
+
             Message msg;
             msg.type = MessageType::GameOver;
             msg.sender = this;
@@ -107,6 +128,9 @@ void CollisionController::handleShipWeaponPickupCollisions() {
 
         if (checkCollision(ship, weaponPickup)) {
             weaponPickup->active = false;
+
+            WeaponType weaponType = weaponPickup->getWeaponType();
+            printf("Weapon picked up: %s\n", weaponTypeToString(weaponType).c_str());
 
             Message msg;
             msg.type = MessageType::WeaponPickedUp;

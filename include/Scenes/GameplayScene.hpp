@@ -61,4 +61,6 @@ private:
     void cleanupInactiveActors();
 
     std::shared_ptr<ExplosionController> explosionController;
+
+    sf::Clock gameTimer;
 };

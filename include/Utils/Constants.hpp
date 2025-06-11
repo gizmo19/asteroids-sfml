@@ -58,11 +58,11 @@ namespace Constants {
     constexpr float GAME_OVER_LINE_Y = 1192.0f;
 
     // Weapon Rarity System
-    constexpr float RIFLE_SPAWN_RATE = 45.0f;        // Common
-    constexpr float REVOLVER_SPAWN_RATE = 30.0f;     // Uncommon
-    constexpr float SHOTGUN_SPAWN_RATE = 15.0f;      // Rare
-    constexpr float ROCKET_SPAWN_RATE = 7.0f;        // Epic
-    constexpr float FLAMETHROWER_SPAWN_RATE = 3.0f;  // Legendary
+    constexpr float RIFLE_SPAWN_RATE = 0.0f;        // Common
+    constexpr float REVOLVER_SPAWN_RATE = 0.0f;     // Uncommon
+    constexpr float SHOTGUN_SPAWN_RATE = 0.0f;      // Rare
+    constexpr float ROCKET_SPAWN_RATE = 100.0f;        // Epic
+    constexpr float FLAMETHROWER_SPAWN_RATE = 0.0f;  // Legendary
 
     // Glow Effects
     constexpr float GLOW_PULSE_SPEED = 2.0f;
@@ -72,7 +72,19 @@ namespace Constants {
     constexpr float GLOW_INNER_RADIUS = 25.0f;
 
     // Explosion constants
-    static const float EXPLOSION_RADIUS = 500.0f;
+    static const float EXPLOSION_RADIUS = 400.0f;
     static const int ASTEROID_SCORE_POINTS = 10;
 
+    namespace Audio {
+        constexpr const char* SOUNDTRACK_PATH = "assets/music/soundtrack.mp3";
+		constexpr const char* LASER_SOUND_PATH = "assets/music/shoot.mp3";
+		constexpr const char* DESTRUCTION_SOUND_PATH = "assets/music/destruction.mp3";
+		constexpr const char* EXPLOSION_SOUND_PATH = "assets/music/explosion.mp3";
+        constexpr const char* DEATH_SOUND_PATH = "assets/music/death.mp3";
+        constexpr float DEFAULT_MUSIC_VOLUME = 0.2f;
+		constexpr float DEFAULT_LASER_VOLUME = 1.0f;
+		constexpr float DEFAULT_DESTRUCTION_VOLUME = 1.0f;
+		constexpr float DEFAULT_EXPLOSION_VOLUME = 1.0f;
+		constexpr float DEFAULT_DEATH_VOLUME = 1.0f;
+    }
 }

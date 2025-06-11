@@ -17,12 +17,19 @@ public:
     sf::RenderWindow& getWindow();
     float getDeltaTime() const;
 
+    float getGameTime() const;
+    void startGameTimer();
+    void stopGameTimer();
+
 private:
     sf::RenderWindow window;
     std::vector<std::shared_ptr<Scene>> scenes;
     std::shared_ptr<Scene> activeScene;
     sf::Clock clock;
     float deltaTime;
+
+    sf::Clock gameTimer;
+    bool gameStarted;
 
     void handleEvents();
     void update();
