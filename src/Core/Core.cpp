@@ -88,9 +88,8 @@ void Core::render() {
 
     window.display();
 }
-
-void Core::switchToGameOverScene() {
-    auto gameOverScene = std::make_shared<GameOverScene>(&window);
+void Core::switchToGameOverScene(int score) {
+    auto gameOverScene = std::make_shared<GameOverScene>(&window, score);
     activeScene = gameOverScene;
     activeScene->setWindow(&window);
     activeScene->initialize();

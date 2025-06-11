@@ -80,7 +80,7 @@ void GameplayScene::initialize() {
     MessageBus::subscribe(MessageType::GameOver, [this](const Message& msg) {
         if (!gameOver) {
             gameOver = true;
-            core->switchToGameOverScene();
+            core->switchToGameOverScene(score);
             float survivalTime = gameTimer.getElapsedTime().asSeconds();
             printf("\n=== GAME OVER ===\n");
             printf("You survived for: %.2f seconds\n", survivalTime);
