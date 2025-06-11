@@ -11,6 +11,9 @@
 #include "../../include/Utils/WeaponSystem.hpp"
 #include "../../include/Utils/MessageData.hpp"
 #include "../../include/Utils/Constants.hpp"
+#include "../../include/Controllers/AudioController.hpp"
+#include "../../include/Utils/Constants.hpp"
+#include "../../include/Utils/AudioManager.hpp"
 #include <cstdlib>
 #include <ctime>
 #include <cmath>
@@ -48,6 +51,8 @@ void GameplayScene::initialize() {
     explosionController = std::make_shared<ExplosionController>();
     explosionController->setAsteroids(&asteroids);
     addController(explosionController);
+    auto audioController = std::make_shared<AudioController>(Constants::Audio::SOUNDTRACK_PATH);
+    addController(audioController);
 
     MessageBus::subscribe(MessageType::BulletFired, [this](const Message& msg) {
         BulletData data = std::any_cast<BulletData>(msg.payload);
@@ -57,6 +62,9 @@ void GameplayScene::initialize() {
 
         auto bullet = createBullet(data.position, direction, data.angle, data.weaponType);
         bullet->velocity = direction * data.speed + ship->velocity * Constants::BULLET_VELOCITY_INFLUENCE;
+
+        AudioManager::getInstance().playSound(Constants::Audio::LASER_SOUND_PATH);
+
         bullets.push_back(bullet);
         addActor(bullet);
         });

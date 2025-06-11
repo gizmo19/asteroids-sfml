@@ -75,4 +75,12 @@ namespace Constants {
     static const float EXPLOSION_RADIUS = 500.0f;
     static const int ASTEROID_SCORE_POINTS = 10;
 
+    namespace Audio {
+        constexpr const char* SOUNDTRACK_PATH = "assets/music/soundtrack.mp3";
+		constexpr const char* LASER_SOUND_PATH = "assets/music/shoot.mp3";
+		constexpr const char* DESTRUCTION_SOUND_PATH = "assets/music/destruction.mp3";
+        constexpr float DEFAULT_MUSIC_VOLUME = 15.0f;
+		constexpr float DEFAULT_LASER_VOLUME = 25.0f;
+		constexpr float DEFAULT_DESTRUCTION_VOLUME = 50.0f;
+    }
 }
