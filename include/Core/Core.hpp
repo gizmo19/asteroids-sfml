@@ -14,6 +14,8 @@ public:
     void addScene(std::shared_ptr<Scene> scene);
     void setActiveScene(size_t index);
     void switchToGameOverScene(int score);
+    void switchToGameplayScene();
+
     sf::RenderWindow& getWindow();
     float getDeltaTime() const;
 

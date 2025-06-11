@@ -1,6 +1,7 @@
 #include "../../include/Core/Core.hpp"
 #include "../../include/Scenes/Scene.hpp"
 #include "../../include/Scenes/GameOverScene.hpp"
+#include "../../include/Scenes/GameplayScene.hpp"
 Core::Core() : window(sf::VideoMode({ 1600, 1200 }), "Asteroids SFML"), deltaTime(0.0f) {
     window.setFramerateLimit(60);
 }
@@ -67,9 +68,17 @@ void Core::render() {
     window.display();
 }
 
+
 void Core::switchToGameOverScene(int score) {
-    auto gameOverScene = std::make_shared<GameOverScene>(&window, score);
+    auto gameOverScene = std::make_shared<GameOverScene>(this, &window, score);
     activeScene = gameOverScene;
+    activeScene->setWindow(&window);
+    activeScene->initialize();
+}
+
+void Core::switchToGameplayScene() {
+    auto gameplayScene = std::make_shared<GameplayScene>(this, &window);
+    activeScene = gameplayScene;
     activeScene->setWindow(&window);
     activeScene->initialize();
 }
