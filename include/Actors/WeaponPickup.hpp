@@ -3,8 +3,8 @@
 
 enum class WeaponType {
     Default,
-    Minigun,
-    Bazooka,
+    Rifle,
+    Revolver,
     Shotgun
 };
 

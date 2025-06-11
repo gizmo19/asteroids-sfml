@@ -143,10 +143,10 @@ std::shared_ptr<Actor> GameplayScene::createBullet(sf::Vector2f position, sf::Ve
 
     sf::Color weaponColor;
     switch (weaponType) {
-    case WeaponType::Minigun:
+    case WeaponType::Rifle:
         weaponColor = sf::Color::Yellow;
         break;
-    case WeaponType::Bazooka:
+    case WeaponType::Revolver:
         weaponColor = sf::Color::Red;
         break;
     case WeaponType::Shotgun:
@@ -175,10 +175,10 @@ std::shared_ptr<WeaponPickup> GameplayScene::createWeaponPickup() {
 
     sf::Texture* selectedTexture;
     switch (weaponType) {
-    case WeaponType::Minigun:
+    case WeaponType::Rifle:
         selectedTexture = &rifleTexture;
         break;
-    case WeaponType::Bazooka:
+    case WeaponType::Revolver:
         selectedTexture = &rocketTexture;
         break;
     case WeaponType::Shotgun:

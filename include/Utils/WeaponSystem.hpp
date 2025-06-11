@@ -9,6 +9,7 @@ struct WeaponStats {
     float spread;
     float bulletSpeed;
     float duration;
+    float speedMultiplier;
 };
 
 class WeaponSystem {

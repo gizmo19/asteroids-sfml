@@ -56,11 +56,17 @@ void ShipController::handleMouseRotation() {
 void ShipController::updateMovement(float deltaTime) {
     attachedActor->velocity *= friction;
 
+    float currentMaxSpeed = maxSpeed;
+    if (currentWeapon != WeaponType::Default && weaponDuration > 0.0f) {
+        WeaponStats stats = WeaponSystem::getWeaponStats(currentWeapon);
+        currentMaxSpeed *= stats.speedMultiplier;
+    }
+
     float speed = std::sqrt(attachedActor->velocity.x * attachedActor->velocity.x +
         attachedActor->velocity.y * attachedActor->velocity.y);
-    if (speed > maxSpeed) {
-        attachedActor->velocity.x = (attachedActor->velocity.x / speed) * maxSpeed;
-        attachedActor->velocity.y = (attachedActor->velocity.y / speed) * maxSpeed;
+    if (speed > currentMaxSpeed) {
+        attachedActor->velocity.x = (attachedActor->velocity.x / speed) * currentMaxSpeed;
+        attachedActor->velocity.y = (attachedActor->velocity.y / speed) * currentMaxSpeed;
     }
 
     attachedActor->position += attachedActor->velocity;
@@ -104,6 +110,13 @@ void ShipController::fireWeapon() {
     float dx = static_cast<float>(mousePos.x) - attachedActor->position.x;
     float dy = static_cast<float>(mousePos.y) - attachedActor->position.y;
     float baseAngle = std::atan2(dy, dx) * 180.0f / 3.14159f + 90.0f;
+
+    if (currentWeapon == WeaponType::Shotgun) {
+        const float RECOIL_FORCE = 3.0f;
+        float recoilAngleRad = (baseAngle - 90.0f + 180.0f) * 3.14159f / 180.0f;
+        sf::Vector2f recoilDirection(std::cos(recoilAngleRad), std::sin(recoilAngleRad));
+        attachedActor->velocity += recoilDirection * RECOIL_FORCE;
+    }
 
     for (int i = 0; i < stats.bulletCount; ++i) {
         float angle = baseAngle;
