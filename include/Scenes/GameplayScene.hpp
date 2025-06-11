@@ -2,6 +2,7 @@
 #include "Scene.hpp"
 #include "../Actors/Actor.hpp"
 #include "../Actors/WeaponPickup.hpp"
+#include "../Controllers/ExplosionController.hpp"
 #include <SFML/Graphics.hpp>
 #include <SFML/System/Clock.hpp>
 #include <vector>
@@ -51,4 +52,6 @@ private:
     void spawnNewAsteroid();
     void spawnWeaponPickup();
     void cleanupInactiveActors();
+
+    std::shared_ptr<ExplosionController> explosionController;
 };

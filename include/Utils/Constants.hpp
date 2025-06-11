@@ -61,7 +61,7 @@ namespace Constants {
     constexpr float RIFLE_SPAWN_RATE = 45.0f;        // Common
     constexpr float REVOLVER_SPAWN_RATE = 30.0f;     // Uncommon
     constexpr float SHOTGUN_SPAWN_RATE = 15.0f;      // Rare
-    constexpr float ROCKET_SPAWN_RATE = 90.0f;        // Epic
+    constexpr float ROCKET_SPAWN_RATE = 7.0f;        // Epic
     constexpr float FLAMETHROWER_SPAWN_RATE = 3.0f;  // Legendary
 
     // Glow Effects
@@ -72,7 +72,7 @@ namespace Constants {
     constexpr float GLOW_INNER_RADIUS = 25.0f;
 
     // Explosion constants
-    static const float EXPLOSION_RADIUS = 100.0f;
+    static const float EXPLOSION_RADIUS = 500.0f;
     static const int ASTEROID_SCORE_POINTS = 10;
 
 }

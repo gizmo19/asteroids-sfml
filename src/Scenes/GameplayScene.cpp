@@ -36,7 +36,7 @@ void GameplayScene::initialize() {
     collisionController->setWeaponPickups(&weaponPickups);
     addController(collisionController);
 
-    auto explosionController = std::make_shared<ExplosionController>();
+    explosionController = std::make_shared<ExplosionController>();
     explosionController->setAsteroids(&asteroids);
     addController(explosionController);
 
@@ -79,6 +79,8 @@ void GameplayScene::update(float deltaTime) {
     while (asteroids.size() < Constants::MIN_ASTEROID_COUNT) {
         spawnNewAsteroid();
     }
+
+    explosionController->update(deltaTime);
 }
 
 void GameplayScene::render(sf::RenderWindow& window) {
@@ -93,6 +95,8 @@ void GameplayScene::render(sf::RenderWindow& window) {
         line.setFillColor(sf::Color::Red);
         window.draw(line);
     }
+
+    explosionController->render(window);
 }
 
 std::shared_ptr<Actor> GameplayScene::createShip() {

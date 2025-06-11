@@ -16,11 +16,38 @@ void ExplosionController::setAsteroids(std::vector<std::shared_ptr<Actor>>* aste
     asteroids = asteroidList;
 }
 
-void ExplosionController::update(float deltaTime) {}
+void ExplosionController::update(float deltaTime) {
+    for (int i = explosionTimers.size() - 1; i >= 0; i--) {
+        explosionTimers[i] -= deltaTime;
+        if (explosionTimers[i] <= 0) {
+            explosionEffects.erase(explosionEffects.begin() + i);
+            explosionTimers.erase(explosionTimers.begin() + i);
+        }
+    }
+}
+
+void ExplosionController::render(sf::RenderWindow& window) {
+    for (auto& explosion : explosionEffects) {
+        window.draw(explosion);
+    }
+}
 
 void ExplosionController::handleExplosion(sf::Vector2f position, float radius) {
     if (!asteroids) return;
 
+    printf("EXPLOSION TRIGGERED! Position: (%.2f, %.2f), Radius: %.2f\n",
+        position.x, position.y, radius);
+
+    sf::CircleShape explosion(radius);
+    explosion.setPosition(sf::Vector2f(position.x - radius, position.y - radius));
+    explosion.setFillColor(sf::Color(255, 255, 0, 80));
+    explosion.setOutlineThickness(3.0f);
+    explosion.setOutlineColor(sf::Color::Red);
+
+    explosionEffects.push_back(explosion);
+    explosionTimers.push_back(1.0f);
+
+    int destroyedCount = 0;
     for (auto& asteroid : *asteroids) {
         if (!asteroid->active) continue;
 
@@ -31,6 +58,7 @@ void ExplosionController::handleExplosion(sf::Vector2f position, float radius) {
 
         if (distance <= radius + asteroid->radius) {
             asteroid->active = false;
+            destroyedCount++;
 
             Message msg;
             msg.type = MessageType::AsteroidDestroyed;
@@ -39,4 +67,6 @@ void ExplosionController::handleExplosion(sf::Vector2f position, float radius) {
             MessageBus::publish(msg);
         }
     }
+
+    printf("Explosion destroyed %d asteroids\n", destroyedCount);
 }
