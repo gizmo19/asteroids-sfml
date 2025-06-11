@@ -1,4 +1,5 @@
 #include "../../include/Scenes/GameplayScene.hpp"
+#include "../../include/Core/Core.hpp"
 #include "../../include/Actors/Actor.hpp"
 #include "../../include/Controllers/ShipController.hpp"
 #include "../../include/Controllers/AsteroidController.hpp"
@@ -12,20 +13,16 @@
 #include <string>
 #include <sstream>
 
-GameplayScene::GameplayScene(sf::RenderWindow* window) : score(0), gameOver(false), gameWindow(window), text(sf::Text(font)) {
+
+GameplayScene::GameplayScene(Core* core, sf::RenderWindow* window): core(core), score(0), gameOver(false), gameWindow(window), text(sf::Text(font)) {
     std::srand(static_cast<unsigned>(std::time(nullptr)));
 }
 
-
 void GameplayScene::initialize() {
-
     if (!font.openFromFile("assets/fonts/jersey.ttf")) {
         return;
     }
     sf::Text text(font);
-   
-
-    
 
     loadTextures();
     setupBackground();
@@ -64,8 +61,8 @@ void GameplayScene::initialize() {
         });
 
     MessageBus::subscribe(MessageType::GameOver, [this](const Message& msg) {
-        gameOver = true;
-    });
+        core->switchToGameOverScene();
+      });
 }
 
 void GameplayScene::update(float deltaTime) {
@@ -80,10 +77,7 @@ void GameplayScene::update(float deltaTime) {
         spawnNewAsteroid();
     }
 
-    
 }
-
-
 
 void GameplayScene::render(sf::RenderWindow& window) {
     
@@ -100,6 +94,7 @@ void GameplayScene::render(sf::RenderWindow& window) {
         line.setPosition({ 0.0f, 1192.0f });
         line.setFillColor(sf::Color::Red);
         window.draw(line);
+
     }
 
 

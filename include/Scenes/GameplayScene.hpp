@@ -2,10 +2,13 @@
 #include "Scene.hpp"
 #include <SFML/Graphics.hpp>
 
+class Core;
 class GameplayScene : public Scene {
 public:
     GameplayScene();
-    GameplayScene(sf::RenderWindow* window);
+    GameplayScene(Core* core, sf::RenderWindow* window);
+    
+
     void initialize() override;
     void update(float deltaTime) override;
     void render(sf::RenderWindow& window) override;
@@ -19,10 +22,10 @@ public:
     std::shared_ptr<Actor> getShip() { return ship; }
 
 private:
-    /*sf::Font font;
-    sf::Text scoreText;*/
-    sf::Font font;
-    sf::Text text;
+    Core* core;
+     sf::Font font;
+     sf::Text text;
+
 
     sf::Texture backgroundTexture;
     sf::Texture shipTexture;
