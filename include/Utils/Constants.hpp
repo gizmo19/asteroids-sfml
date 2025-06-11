@@ -58,11 +58,11 @@ namespace Constants {
     constexpr float GAME_OVER_LINE_Y = 1192.0f;
 
     // Weapon Rarity System
-    constexpr float RIFLE_SPAWN_RATE = 0.0f;        // Common
-    constexpr float REVOLVER_SPAWN_RATE = 0.0f;     // Uncommon
-    constexpr float SHOTGUN_SPAWN_RATE = 0.0f;      // Rare
-    constexpr float ROCKET_SPAWN_RATE = 90.0f;        // Epic
-    constexpr float FLAMETHROWER_SPAWN_RATE = 10.0f;  // Legendary
+    constexpr float RIFLE_SPAWN_RATE = 45.0f;        // Common
+    constexpr float REVOLVER_SPAWN_RATE = 30.0f;     // Uncommon
+    constexpr float SHOTGUN_SPAWN_RATE = 15.0f;      // Rare
+    constexpr float ROCKET_SPAWN_RATE = 7.0f;        // Epic
+    constexpr float FLAMETHROWER_SPAWN_RATE = 3.0f;  // Legendary
 
     // Glow Effects
     constexpr float GLOW_PULSE_SPEED = 2.0f;
