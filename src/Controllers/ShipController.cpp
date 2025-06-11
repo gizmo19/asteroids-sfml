@@ -112,10 +112,17 @@ void ShipController::fireWeapon() {
     float baseAngle = std::atan2(dy, dx) * 180.0f / 3.14159f + 90.0f;
 
     if (currentWeapon == WeaponType::Shotgun) {
-        const float RECOIL_FORCE = 3.0f;
+        const float RECOIL_FORCE = 6.0f;
         float recoilAngleRad = (baseAngle - 90.0f + 180.0f) * 3.14159f / 180.0f;
         sf::Vector2f recoilDirection(std::cos(recoilAngleRad), std::sin(recoilAngleRad));
         attachedActor->velocity += recoilDirection * RECOIL_FORCE;
+    }
+
+    if (currentWeapon == WeaponType::RocketLauncher) {
+        const float ROCKET_RECOIL = 5.0f;
+        float recoilAngleRad = (baseAngle - 90.0f + 180.0f) * 3.14159f / 180.0f;
+        sf::Vector2f recoilDirection(std::cos(recoilAngleRad), std::sin(recoilAngleRad));
+        attachedActor->velocity += recoilDirection * ROCKET_RECOIL;
     }
 
     for (int i = 0; i < stats.bulletCount; ++i) {

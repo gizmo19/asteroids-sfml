@@ -24,9 +24,13 @@ private:
     sf::Texture shipTexture;
     sf::Texture asteroidTexture;
     sf::Texture bulletTexture;
+
     sf::Texture rifleTexture;
-    sf::Texture rocketTexture;
     sf::Texture shotgunTexture;
+	sf::Texture revolverTexture;
+	sf::Texture flamethrowerTexture;
+    sf::Texture rocketLauncherTexture;
+
     std::unique_ptr<sf::Sprite> backgroundSprite;
 
     sf::Clock weaponSpawnClock;

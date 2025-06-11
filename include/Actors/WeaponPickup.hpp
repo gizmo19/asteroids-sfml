@@ -5,7 +5,9 @@ enum class WeaponType {
     Default,
     Rifle,
     Revolver,
-    Shotgun
+    Shotgun,
+    RocketLauncher,
+    Flamethrower
 };
 
 class WeaponPickup : public Actor {

@@ -179,10 +179,16 @@ std::shared_ptr<WeaponPickup> GameplayScene::createWeaponPickup() {
         selectedTexture = &rifleTexture;
         break;
     case WeaponType::Revolver:
-        selectedTexture = &rocketTexture;
+        selectedTexture = &revolverTexture;
         break;
     case WeaponType::Shotgun:
         selectedTexture = &shotgunTexture;
+        break;
+    case WeaponType::Flamethrower:
+        selectedTexture = &flamethrowerTexture;
+        break;
+    case WeaponType::RocketLauncher:
+        selectedTexture = &rocketLauncherTexture;
         break;
     default:
         selectedTexture = &bulletTexture;
@@ -205,9 +211,12 @@ void GameplayScene::loadTextures() {
     shipTexture.loadFromFile("assets/images/ship.png");
     asteroidTexture.loadFromFile("assets/images/asteroid.png");
     bulletTexture.loadFromFile("assets/images/bullet.png");
+
     rifleTexture.loadFromFile("assets/images/rifle.png");
-    rocketTexture.loadFromFile("assets/images/rocket.png");
     shotgunTexture.loadFromFile("assets/images/shotgun.png");
+	revolverTexture.loadFromFile("assets/images/revolver.png");
+	flamethrowerTexture.loadFromFile("assets/images/flamethrower.png");
+    rocketLauncherTexture.loadFromFile("assets/images/rocket_launcher.png");
 }
 
 void GameplayScene::setupBackground() {
