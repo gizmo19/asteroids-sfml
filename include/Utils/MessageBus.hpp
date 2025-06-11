@@ -9,7 +9,11 @@ enum class MessageType {
     BulletFired,
     ShipDestroyed,
     GameOver,
-    ScoreUpdate
+    ScoreUpdate,
+    WeaponPickedUp,
+    WeaponExpired,
+    RocketExplosion,
+    ExplosionTriggered
 };
 
 struct Message {

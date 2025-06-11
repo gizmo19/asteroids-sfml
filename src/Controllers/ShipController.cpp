@@ -4,7 +4,12 @@
 #include <cmath>
 
 ShipController::ShipController() : acceleration(0.4f), friction(0.92f),
-maxSpeed(12.0f), canShoot(true), window(nullptr) {
+maxSpeed(12.0f), canShoot(true), window(nullptr), currentWeapon(WeaponType::Default), weaponDuration(0.0f) {
+
+    MessageBus::subscribe(MessageType::WeaponPickedUp, [this](const Message& msg) {
+        WeaponType weaponType = std::any_cast<WeaponType>(msg.payload);
+        setWeapon(weaponType);
+        });
 }
 
 void ShipController::update(float deltaTime) {
@@ -14,6 +19,7 @@ void ShipController::update(float deltaTime) {
     handleMouseRotation();
     updateMovement(deltaTime);
     constrainToBounds();
+    updateWeapon(deltaTime);
     handleShooting();
 }
 
@@ -47,16 +53,20 @@ void ShipController::handleMouseRotation() {
     attachedActor->rotation = angle;
 }
 
-
-
 void ShipController::updateMovement(float deltaTime) {
     attachedActor->velocity *= friction;
 
+    float currentMaxSpeed = maxSpeed;
+    if (currentWeapon != WeaponType::Default && weaponDuration > 0.0f) {
+        WeaponStats stats = WeaponSystem::getWeaponStats(currentWeapon);
+        currentMaxSpeed *= stats.speedMultiplier;
+    }
+
     float speed = std::sqrt(attachedActor->velocity.x * attachedActor->velocity.x +
         attachedActor->velocity.y * attachedActor->velocity.y);
-    if (speed > maxSpeed) {
-        attachedActor->velocity.x = (attachedActor->velocity.x / speed) * maxSpeed;
-        attachedActor->velocity.y = (attachedActor->velocity.y / speed) * maxSpeed;
+    if (speed > currentMaxSpeed) {
+        attachedActor->velocity.x = (attachedActor->velocity.x / speed) * currentMaxSpeed;
+        attachedActor->velocity.y = (attachedActor->velocity.y / speed) * currentMaxSpeed;
     }
 
     attachedActor->position += attachedActor->velocity;
@@ -65,17 +75,83 @@ void ShipController::updateMovement(float deltaTime) {
 void ShipController::handleShooting() {
     if (sf::Mouse::isButtonPressed(sf::Mouse::Button::Left)) {
         if (canShoot) {
-            Message msg;
-            msg.type = MessageType::BulletFired;
-            msg.sender = this;
-            msg.payload = attachedActor->position;
-            MessageBus::publish(msg);
-            canShoot = false;
+            fireWeapon();
         }
     }
     else {
         canShoot = true;
     }
+}
+
+void ShipController::updateWeapon(float deltaTime) {
+    if (currentWeapon != WeaponType::Default && weaponDuration > 0.0f) {
+        weaponDuration -= deltaTime;
+        if (weaponDuration <= 0.0f) {
+            currentWeapon = WeaponType::Default;
+            Message msg;
+            msg.type = MessageType::WeaponExpired;
+            msg.sender = this;
+            MessageBus::publish(msg);
+        }
+    }
+}
+
+void ShipController::fireWeapon() {
+    WeaponStats stats = WeaponSystem::getWeaponStats(currentWeapon);
+
+    if (shootClock.getElapsedTime().asSeconds() < stats.fireRate) {
+        return;
+    }
+
+    shootClock.restart();
+    canShoot = false;
+
+    sf::Vector2i mousePos = sf::Mouse::getPosition(*window);
+    float dx = static_cast<float>(mousePos.x) - attachedActor->position.x;
+    float dy = static_cast<float>(mousePos.y) - attachedActor->position.y;
+    float baseAngle = std::atan2(dy, dx) * 180.0f / 3.14159f + 90.0f;
+
+    if (currentWeapon == WeaponType::Shotgun) {
+        const float RECOIL_FORCE = 6.0f;
+        float recoilAngleRad = (baseAngle - 90.0f + 180.0f) * 3.14159f / 180.0f;
+        sf::Vector2f recoilDirection(std::cos(recoilAngleRad), std::sin(recoilAngleRad));
+        attachedActor->velocity += recoilDirection * RECOIL_FORCE;
+    }
+
+    if (currentWeapon == WeaponType::RocketLauncher) {
+        const float ROCKET_RECOIL = 5.0f;
+        float recoilAngleRad = (baseAngle - 90.0f + 180.0f) * 3.14159f / 180.0f;
+        sf::Vector2f recoilDirection(std::cos(recoilAngleRad), std::sin(recoilAngleRad));
+        attachedActor->velocity += recoilDirection * ROCKET_RECOIL;
+    }
+
+    for (int i = 0; i < stats.bulletCount; ++i) {
+        float angle = baseAngle;
+        if (stats.bulletCount > 1) {
+            float spreadStep = stats.spread / (stats.bulletCount - 1);
+            angle += -stats.spread / 2.0f + i * spreadStep;
+        }
+
+        Message msg;
+        msg.type = MessageType::BulletFired;
+        msg.sender = this;
+
+        BulletData data;
+        data.position = attachedActor->position;
+        data.angle = angle;
+        data.speed = stats.bulletSpeed;
+        data.weaponType = currentWeapon;
+
+        msg.payload = data;
+        MessageBus::publish(msg);
+    }
+}
+
+void ShipController::setWeapon(WeaponType type) {
+    currentWeapon = type;
+    WeaponStats stats = WeaponSystem::getWeaponStats(type);
+    weaponDuration = stats.duration;
+    weaponClock.restart();
 }
 
 void ShipController::constrainToBounds() {
@@ -98,4 +174,20 @@ void ShipController::constrainToBounds() {
         attachedActor->position.y = 1200 - BOUNDS_MARGIN;
         attachedActor->velocity.y = -std::abs(attachedActor->velocity.y) * BOUNCE_FACTOR;
     }
+}
+
+bool ShipController::hasSpecialWeapon() const {
+    return currentWeapon != WeaponType::Default && weaponDuration > 0.0f;
+}
+
+float ShipController::getWeaponTimeLeft() const {
+    return weaponDuration;
+}
+
+float ShipController::getWeaponTotalTime() const {
+    return WeaponSystem::getWeaponStats(currentWeapon).duration;
+}
+
+WeaponType ShipController::getCurrentWeaponType() const {
+    return currentWeapon;
 }

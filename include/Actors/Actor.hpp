@@ -2,8 +2,10 @@
 #include <SFML/Graphics.hpp>
 #include <vector>
 #include <memory>
+#include <optional>
 
 class Controller;
+enum class WeaponType;
 
 class Actor {
 public:
@@ -20,14 +22,16 @@ public:
     void setScale(const sf::Vector2f& scale);
     sf::Sprite* getSprite() const;
 
-
     sf::Vector2f position;
     sf::Vector2f velocity;
     float rotation;
     float radius;
     bool active;
+    WeaponType weaponType;
+
+    const std::vector<std::shared_ptr<Controller>>& getControllers() const { return controllers; }
 
 protected:
     std::vector<std::shared_ptr<Controller>> controllers;
-    std::unique_ptr<sf::Sprite> sprite;
+    std::optional<sf::Sprite> sprite;
 };

@@ -1,7 +1,9 @@
 #include "../../include/Controllers/BulletController.hpp"
 #include "../../include/Actors/Actor.hpp"
+#include "../../include/Utils/Constants.hpp"
 
-BulletController::BulletController() {}
+BulletController::BulletController(WeaponType weaponType) : weaponType(weaponType) {
+}
 
 void BulletController::update(float deltaTime) {
     if (!attachedActor) return;
@@ -15,8 +17,8 @@ void BulletController::updateMovement(float deltaTime) {
 }
 
 void BulletController::checkBounds() {
-    if (attachedActor->position.x < 0 || attachedActor->position.x > 1600 ||
-        attachedActor->position.y < 0 || attachedActor->position.y > 1200) {
+    if (attachedActor->position.x < -50.0f || attachedActor->position.x > Constants::WINDOW_WIDTH + 50.0f ||
+        attachedActor->position.y < -50.0f || attachedActor->position.y > Constants::WINDOW_HEIGHT + 50.0f) {
         attachedActor->active = false;
     }
 }
