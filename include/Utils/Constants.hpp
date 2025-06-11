@@ -72,7 +72,7 @@ namespace Constants {
     constexpr float GLOW_INNER_RADIUS = 25.0f;
 
     // Explosion constants
-    static const float EXPLOSION_RADIUS = 200.0f;
+    static const float EXPLOSION_RADIUS = 400.0f;
     static const int ASTEROID_SCORE_POINTS = 10;
 
     namespace Audio {
@@ -81,10 +81,10 @@ namespace Constants {
 		constexpr const char* DESTRUCTION_SOUND_PATH = "assets/music/destruction.mp3";
 		constexpr const char* EXPLOSION_SOUND_PATH = "assets/music/explosion.mp3";
         constexpr const char* DEATH_SOUND_PATH = "assets/music/death.mp3";
-        constexpr float DEFAULT_MUSIC_VOLUME = 15.0f;
-		constexpr float DEFAULT_LASER_VOLUME = 25.0f;
-		constexpr float DEFAULT_DESTRUCTION_VOLUME = 50.0f;
-		constexpr float DEFAULT_EXPLOSION_VOLUME = 50.0f;
-		constexpr float DEFAULT_DEATH_VOLUME = 50.0f;
+        constexpr float DEFAULT_MUSIC_VOLUME = 0.2f;
+		constexpr float DEFAULT_LASER_VOLUME = 1.0f;
+		constexpr float DEFAULT_DESTRUCTION_VOLUME = 1.0f;
+		constexpr float DEFAULT_EXPLOSION_VOLUME = 1.0f;
+		constexpr float DEFAULT_DEATH_VOLUME = 1.0f;
     }
 }
