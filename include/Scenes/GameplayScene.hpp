@@ -19,6 +19,11 @@ public:
     std::shared_ptr<Actor> getShip() { return ship; }
 
 private:
+    /*sf::Font font;
+    sf::Text scoreText;*/
+    sf::Font font;
+    sf::Text text;
+
     sf::Texture backgroundTexture;
     sf::Texture shipTexture;
     sf::Texture asteroidTexture;
