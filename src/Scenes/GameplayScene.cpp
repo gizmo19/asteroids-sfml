@@ -35,6 +35,9 @@ void GameplayScene::initialize() {
     loadTextures();
     setupBackground();
 
+    gameTimer.restart();
+    printf("Game started! Timer running...\n");
+
     ship = createShip();
     addActor(ship);
 
@@ -75,8 +78,15 @@ void GameplayScene::initialize() {
         });
 
     MessageBus::subscribe(MessageType::GameOver, [this](const Message& msg) {
-        gameOver = true;
-        });
+        if (!gameOver) {
+            gameOver = true;
+            float survivalTime = gameTimer.getElapsedTime().asSeconds();
+            printf("\n=== GAME OVER ===\n");
+            printf("You survived for: %.2f seconds\n", survivalTime);
+            printf("Final score: %d\n", score);
+            printf("================\n");
+        }
+    });
 }
 
 void GameplayScene::update(float deltaTime) {
