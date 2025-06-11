@@ -8,9 +8,11 @@
 #include <vector>
 #include <memory>
 
+class Core;
 class GameplayScene : public Scene {
 public:
-    GameplayScene(sf::RenderWindow* window);
+    GameplayScene();
+    GameplayScene(Core* core, sf::RenderWindow* window);
     void initialize() override;
     void update(float deltaTime) override;
     void render(sf::RenderWindow& window) override;
@@ -22,6 +24,7 @@ private:
     std::vector<std::shared_ptr<WeaponPickup>> weaponPickups;
     /*sf::Font font;
     sf::Text scoreText;*/
+    Core* core;
     sf::Font font;
     sf::Text text;
 

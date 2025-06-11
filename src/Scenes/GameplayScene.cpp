@@ -11,6 +11,7 @@
 #include "../../include/Utils/WeaponSystem.hpp"
 #include "../../include/Utils/MessageData.hpp"
 #include "../../include/Utils/Constants.hpp"
+#include "../../include/Core/Core.hpp"
 #include <cstdlib>
 #include <ctime>
 #include <cmath>
@@ -18,10 +19,9 @@
 #include <string>
 #include <sstream>
 
-GameplayScene::GameplayScene(sf::RenderWindow* window) : score(0), gameOver(false), gameWindow(window), text(sf::Text(font)) {
+GameplayScene::GameplayScene(Core* core, sf::RenderWindow* window) : core(core), score(0), gameOver(false), gameWindow(window), text(sf::Text(font)) {
     std::srand(static_cast<unsigned>(std::time(nullptr)));
 }
-
 
 void GameplayScene::initialize() {
 
@@ -68,7 +68,7 @@ void GameplayScene::initialize() {
         });
 
     MessageBus::subscribe(MessageType::GameOver, [this](const Message& msg) {
-        gameOver = true;
+        core->switchToGameOverScene();
         });
 }
 
