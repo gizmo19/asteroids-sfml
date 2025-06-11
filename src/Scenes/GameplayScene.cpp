@@ -14,6 +14,7 @@
 #include "../../include/Core/Core.hpp"
 #include "../../include/Controllers/AudioController.hpp"
 #include "../../include/Utils/AudioManager.hpp"
+#include "../../include/Core/Core.hpp"
 #include <cstdlib>
 #include <ctime>
 #include <cmath>
