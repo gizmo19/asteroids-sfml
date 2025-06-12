@@ -1,6 +1,9 @@
 #pragma once
 #include "Scene.hpp"
 #include <SFML/Graphics.hpp>
+#include <memory>
+
+class Button;
 
 class GameOverScene : public Scene {
 public:
@@ -18,4 +21,10 @@ private:
     sf::Text creditsText;
     sf::Text timerText;
     sf::RenderWindow* gameWindow;
+
+    std::shared_ptr<Button> restartButton;
+    std::shared_ptr<Button> exitButton;
+
+    sf::Vector2f getMousePosition();
+    void handleMouseInput();
 };

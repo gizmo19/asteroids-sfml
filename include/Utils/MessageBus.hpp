@@ -18,7 +18,9 @@ enum class MessageType {
     StopMusic,
     PauseMusic,
     ResumeMusic,
-    PlaySound
+    PlaySound,
+    RestartGame,
+    ExitGame
 };
 
 struct Message {

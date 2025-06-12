@@ -3,6 +3,8 @@
 #include <memory>
 #include <vector>
 #include "../../include/Scenes/GameOverScene.hpp"
+#include "../../include/Utils/MessageBus.hpp"
+
 class Scene;
 
 class Core {
@@ -13,7 +15,7 @@ public:
     void run();
     void addScene(std::shared_ptr<Scene> scene);
     void setActiveScene(size_t index);
-    void switchToGameOverScene(int score,float survivalTime);
+    void switchToGameOverScene(int score, float survivalTime);
     void switchToMenu();
     sf::RenderWindow& getWindow();
     float getDeltaTime() const;
@@ -35,4 +37,5 @@ private:
     void handleEvents();
     void update();
     void render();
+    void setupMessageHandlers();
 };
