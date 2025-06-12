@@ -2,7 +2,7 @@
 #include <SFML/Graphics.hpp>
 #include <memory>
 #include <vector>
-
+#include "../../include/Scenes/GameOverScene.hpp"
 class Scene;
 
 class Core {
@@ -13,6 +13,8 @@ public:
     void run();
     void addScene(std::shared_ptr<Scene> scene);
     void setActiveScene(size_t index);
+    void switchToGameOverScene(int score,float survivalTime);
+    void switchToMenu();
     sf::RenderWindow& getWindow();
     float getDeltaTime() const;
 
