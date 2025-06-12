@@ -94,3 +94,8 @@ void Core::switchToGameOverScene(int score, float survivalTime) {
     activeScene->setWindow(&window);
     activeScene->initialize();
 }
+
+void Core::switchToMenu() {
+    stopGameTimer();
+    setActiveScene(0);
+}
