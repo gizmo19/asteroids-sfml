@@ -17,5 +17,7 @@ private:
     sf::Text scoreText;
     sf::Text creditsText;
     sf::Text timerText;
+    sf::Text exitText;
+    sf::Text playAgainText;
     sf::RenderWindow* gameWindow;
 };

@@ -3,7 +3,7 @@
 
 GameOverScene::GameOverScene(sf::RenderWindow* window, int score, float survivalTime)
     : score(score), survivalTime(survivalTime), gameWindow(window),
-    gameOverText(sf::Text(font)), scoreText(sf::Text(font)), timerText(sf::Text(font)), creditsText(sf::Text(font)) {
+    gameOverText(sf::Text(font)), scoreText(sf::Text(font)), timerText(sf::Text(font)), creditsText(sf::Text(font)), exitText(sf::Text(font)), playAgainText(sf::Text(font)){
 }
 
 void GameOverScene::initialize() {
@@ -45,7 +45,31 @@ void GameOverScene::initialize() {
         Constants::WINDOW_HEIGHT / 2 + 200
     ));
 
+    //exit
     
+    exitText = sf::Text(font, "Zakoncz gre", 48);
+    exitText.setFillColor(sf::Color::White);
+    exitText.setOutlineColor(sf::Color::Black);
+    exitText.setOutlineThickness(3);
+
+    sf::FloatRect exitBounds = exitText.getLocalBounds();
+    exitText.setPosition(sf::Vector2f(
+        (Constants::WINDOW_WIDTH - exitBounds.size.x) / 2 - 200,
+        Constants::WINDOW_HEIGHT / 2 + 300
+    ));
+
+    //play again
+
+    playAgainText = sf::Text(font, "Zagraj ponownie", 48);
+    playAgainText.setFillColor(sf::Color::Green);
+    playAgainText.setOutlineColor(sf::Color::Black);
+    playAgainText.setOutlineThickness(4);
+    sf::FloatRect againBounds = playAgainText.getLocalBounds();
+    playAgainText.setPosition(sf::Vector2f(
+        (Constants::WINDOW_WIDTH - againBounds.size.x) / 2 + 200,
+        Constants::WINDOW_HEIGHT / 2 + 300
+    ));
+
     //autorzy
     creditsText = sf::Text(font, "by Dawid Nachlik & Mateusz Hajduczek", 32);
     creditsText.setFillColor(sf::Color::White);
@@ -58,12 +82,30 @@ void GameOverScene::initialize() {
     ));
 }
 
-void GameOverScene::update(float deltaTime) {}
+void GameOverScene::update(float deltaTime) {
+    if (sf::Mouse::isButtonPressed(sf::Mouse::Button::Left)) {
+      
+        sf::Vector2f mousePos = gameWindow->mapPixelToCoords(sf::Mouse::getPosition(*gameWindow));
+        sf::FloatRect exitBounds = exitText.getGlobalBounds();
+        //sf::FloatRect playAgainBounds = playAgainButtonText.getGlobalBounds();
+
+
+        if (exitBounds.contains(mousePos)) {
+            gameWindow->close();
+        }
+
+       /* else if (playAgainBounds.contains(mousePos)) {
+            core->switchToGameplayScene();
+        }*/
+    }
+}
 
 void GameOverScene::render(sf::RenderWindow& window) {
     window.draw(scoreText);
     window.draw(timerText);
     window.draw(gameOverText);
-
+    window.draw(exitText);
+    window.draw(playAgainText);
     window.draw(creditsText);
+
 }
