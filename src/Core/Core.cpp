@@ -26,7 +26,8 @@ void Core::startGameTimer() {
     if (!gameStarted) {
         gameTimer.restart();
         gameStarted = true;
-        printf("Game timer started!\n");
+        printf("\n=== GAME STARTED ===\n");
+        printf("Timer started at: %.1f\n", gameTimer.getElapsedTime().asSeconds());
     }
 }
 
@@ -34,8 +35,8 @@ void Core::stopGameTimer() {
     if (gameStarted) {
         float finalTime = gameTimer.getElapsedTime().asSeconds();
         gameStarted = false;
-        printf("=== GAME OVER ===\n");
-        printf("Survival time: %.2f seconds (%.1f minutes)\n", finalTime, finalTime / 60.0f);
+        printf("\n=== GAME OVER ===\n");
+        printf("Final time: %.1f seconds (%.1f minutes)\n", finalTime, finalTime / 60.0f);
         printf("================\n");
     }
 }

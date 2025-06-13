@@ -17,8 +17,10 @@ void BulletController::updateMovement(float deltaTime) {
 }
 
 void BulletController::checkBounds() {
-    if (attachedActor->position.x < -50.0f || attachedActor->position.x > Constants::WINDOW_WIDTH + 50.0f ||
-        attachedActor->position.y < -50.0f || attachedActor->position.y > Constants::WINDOW_HEIGHT + 50.0f) {
+    if (attachedActor->position.x < -Constants::BOUNDARY_OFFSET ||
+        attachedActor->position.x > Constants::WINDOW_WIDTH + Constants::BOUNDARY_OFFSET ||
+        attachedActor->position.y < -Constants::BOUNDARY_OFFSET ||
+        attachedActor->position.y > Constants::WINDOW_HEIGHT + Constants::BOUNDARY_OFFSET) {
         attachedActor->active = false;
     }
 }

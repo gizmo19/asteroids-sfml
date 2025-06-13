@@ -23,7 +23,9 @@ void WeaponPickupController::updateBobbing() {
 }
 
 void WeaponPickupController::checkLifetime() {
-    if (lifetimeClock.getElapsedTime().asSeconds() > Constants::MAX_LIFETIME) {
+    float currentLifetime = lifetimeClock.getElapsedTime().asSeconds();
+    if (currentLifetime > Constants::MAX_LIFETIME) {
+        printf("Weapon pickup expired after %.1f seconds\n", currentLifetime);
         attachedActor->active = false;
     }
 }
