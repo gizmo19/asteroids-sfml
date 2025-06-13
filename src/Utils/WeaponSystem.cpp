@@ -13,17 +13,59 @@ const std::vector<WeaponRarityItem> WeaponSystem::rarityTable = {
 WeaponStats WeaponSystem::getWeaponStats(WeaponType type) {
     switch (type) {
     case WeaponType::Rifle:
-        return { 0.001f, 1, 0.0f, 12.0f, 8.0f, 1.0f };
+        return {
+            Constants::WeaponStats::Rifle::FIRE_RATE,
+            Constants::WeaponStats::Rifle::BULLET_COUNT,
+            Constants::WeaponStats::Rifle::SPREAD,
+            Constants::WeaponStats::Rifle::BULLET_SPEED,
+            Constants::WeaponStats::Rifle::DURATION,
+            Constants::WeaponStats::Rifle::SPEED_MULTIPLIER
+        };
     case WeaponType::Revolver:
-        return { 1.0f, 1, 0.0f, 8.0f, 10.0f, 1.5f };
+        return {
+            Constants::WeaponStats::Revolver::FIRE_RATE,
+            Constants::WeaponStats::Revolver::BULLET_COUNT,
+            Constants::WeaponStats::Revolver::SPREAD,
+            Constants::WeaponStats::Revolver::BULLET_SPEED,
+            Constants::WeaponStats::Revolver::DURATION,
+            Constants::WeaponStats::Revolver::SPEED_MULTIPLIER
+        };
     case WeaponType::Shotgun:
-        return { 0.8f, 5, 45.0f, 10.0f, 6.0f, 0.8f };
+        return {
+            Constants::WeaponStats::Shotgun::FIRE_RATE,
+            Constants::WeaponStats::Shotgun::BULLET_COUNT,
+            Constants::WeaponStats::Shotgun::SPREAD,
+            Constants::WeaponStats::Shotgun::BULLET_SPEED,
+            Constants::WeaponStats::Shotgun::DURATION,
+            Constants::WeaponStats::Shotgun::SPEED_MULTIPLIER
+        };
     case WeaponType::RocketLauncher:
-        return { 2.0f, 1, 0.0f, 8.0f, 10.0f, 0.7f };
+        return {
+            Constants::WeaponStats::RocketLauncher::FIRE_RATE,
+            Constants::WeaponStats::RocketLauncher::BULLET_COUNT,
+            Constants::WeaponStats::RocketLauncher::SPREAD,
+            Constants::WeaponStats::RocketLauncher::BULLET_SPEED,
+            Constants::WeaponStats::RocketLauncher::DURATION,
+            Constants::WeaponStats::RocketLauncher::SPEED_MULTIPLIER
+        };
     case WeaponType::Flamethrower:
-        return { 0.1f, 3, 25.0f, 6.0f, 8.0f, 0.9f };
+        return {
+            Constants::WeaponStats::Flamethrower::FIRE_RATE,
+            Constants::WeaponStats::Flamethrower::BULLET_COUNT,
+            Constants::WeaponStats::Flamethrower::SPREAD,
+            Constants::WeaponStats::Flamethrower::BULLET_SPEED,
+            Constants::WeaponStats::Flamethrower::DURATION,
+            Constants::WeaponStats::Flamethrower::SPEED_MULTIPLIER
+        };
     default:
-        return { 0.2f, 1, 0.0f, 10.0f, 0.0f, 1.0f };
+        return {
+            Constants::WeaponStats::Default::FIRE_RATE,
+            Constants::WeaponStats::Default::BULLET_COUNT,
+            Constants::WeaponStats::Default::SPREAD,
+            Constants::WeaponStats::Default::BULLET_SPEED,
+            Constants::WeaponStats::Default::DURATION,
+            Constants::WeaponStats::Default::SPEED_MULTIPLIER
+        };
     }
 }
 

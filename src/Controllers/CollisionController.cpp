@@ -66,6 +66,7 @@ void CollisionController::handleBulletAsteroidCollisions() {
             if (!asteroid || !asteroid->active) continue;
 
             if (checkCollision(bullet, asteroid)) {
+                printf("Bullet-Asteroid collision at (%.1f, %.1f)\n", bullet->position.x, bullet->position.y);
                 WeaponType bulletWeaponType = bullet->weaponType;
 
                 bullet->active = false;

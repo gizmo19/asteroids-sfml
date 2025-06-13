@@ -24,7 +24,8 @@ void ExplosionController::update(float deltaTime) {
         updateExplosionStage(effect, deltaTime);
         updateParticles(effect, deltaTime);
 
-        if (!effect.damageDealt && effect.stage == ExplosionStage::EXPAND && effect.stageTimer > 0.1f) {
+        if (!effect.damageDealt && effect.stage == ExplosionStage::EXPAND &&
+            effect.stageTimer > Constants::EXPLOSION_STAGE_THRESHOLD) {
             dealDamageToAsteroids(effect);
             effect.damageDealt = true;
         }
@@ -83,7 +84,7 @@ void ExplosionController::handleExplosion(sf::Vector2f position, float radius) {
     effect.stage = ExplosionStage::FLASH;
     effect.stageTimer = 0;
     effect.currentColor = sf::Color(255, 100, 0, 220);
-    effect.totalDuration = 2.0f;
+    effect.totalDuration = Constants::EXPLOSION_TOTAL_DURATION;
     effect.damageDealt = false;
 
     createParticleExplosion(effect);
@@ -94,11 +95,20 @@ void ExplosionController::createParticleExplosion(ExplosionEffect& effect) {
     static std::random_device rd;
     static std::mt19937 gen(rd());
     std::uniform_real_distribution<float> angleDis(0, 2 * Constants::PI);
-    std::uniform_real_distribution<float> speedDis(50.0f, 200.0f);
-    std::uniform_real_distribution<float> lifeDis(0.8f, 1.5f);
-    std::uniform_real_distribution<float> sizeDis(1.5f, 4.0f);
+    std::uniform_real_distribution<float> speedDis(
+        Constants::EXPLOSION_PARTICLE_MIN_SPEED, 
+        Constants::EXPLOSION_PARTICLE_MAX_SPEED
+    );
+    std::uniform_real_distribution<float> lifeDis(
+        Constants::EXPLOSION_PARTICLE_MIN_LIFE, 
+        Constants::EXPLOSION_PARTICLE_MAX_LIFE
+    );
+    std::uniform_real_distribution<float> sizeDis(
+        Constants::EXPLOSION_PARTICLE_MIN_SIZE, 
+        Constants::EXPLOSION_PARTICLE_MAX_SIZE
+    );
 
-    for (int i = 0; i < 25; i++) {
+    for (int i = 0; i < Constants::EXPLOSION_PARTICLE_COUNT; i++) {
         Particle p;
         p.position = effect.position;
 

@@ -75,16 +75,92 @@ namespace Constants {
     static const float EXPLOSION_RADIUS = 400.0f;
     static const int ASTEROID_SCORE_POINTS = 10;
 
+    // Ship Movement
+    constexpr float SHIP_ACCELERATION = 0.4f;
+    constexpr float SHIP_FRICTION = 0.92f;
+    constexpr float SHIP_MAX_SPEED = 12.0f;
+
+    // Boundary Checks
+    constexpr float BOUNDARY_OFFSET = 50.0f;
+
+    // Explosion Effects
+    constexpr float EXPLOSION_TOTAL_DURATION = 2.0f;
+    constexpr float EXPLOSION_STAGE_THRESHOLD = 0.1f;
+    constexpr int EXPLOSION_PARTICLE_COUNT = 25;
+    constexpr float EXPLOSION_PARTICLE_MIN_SPEED = 50.0f;
+    constexpr float EXPLOSION_PARTICLE_MAX_SPEED = 200.0f;
+    constexpr float EXPLOSION_PARTICLE_MIN_LIFE = 0.8f;
+    constexpr float EXPLOSION_PARTICLE_MAX_LIFE = 1.5f;
+    constexpr float EXPLOSION_PARTICLE_MIN_SIZE = 1.5f;
+    constexpr float EXPLOSION_PARTICLE_MAX_SIZE = 4.0f;
+
     namespace Audio {
         constexpr const char* SOUNDTRACK_PATH = "assets/music/soundtrack.mp3";
 		constexpr const char* LASER_SOUND_PATH = "assets/music/shoot.mp3";
 		constexpr const char* DESTRUCTION_SOUND_PATH = "assets/music/destruction.mp3";
 		constexpr const char* EXPLOSION_SOUND_PATH = "assets/music/explosion.mp3";
         constexpr const char* DEATH_SOUND_PATH = "assets/music/death.mp3";
-        constexpr float DEFAULT_MUSIC_VOLUME = 0.2f;
+        constexpr float DEFAULT_MUSIC_VOLUME = 1.0f;
 		constexpr float DEFAULT_LASER_VOLUME = 1.0f;
 		constexpr float DEFAULT_DESTRUCTION_VOLUME = 1.0f;
 		constexpr float DEFAULT_EXPLOSION_VOLUME = 1.0f;
 		constexpr float DEFAULT_DEATH_VOLUME = 1.0f;
+    }
+
+    // Weapon Stats
+    namespace WeaponStats {
+        namespace Rifle {
+            constexpr float FIRE_RATE = 0.001f;
+            constexpr int BULLET_COUNT = 1;
+            constexpr float SPREAD = 0.0f;
+            constexpr float BULLET_SPEED = 12.0f;
+            constexpr float DURATION = 8.0f;
+            constexpr float SPEED_MULTIPLIER = 1.0f;
+        }
+
+        namespace Revolver {
+            constexpr float FIRE_RATE = 1.0f;
+            constexpr int BULLET_COUNT = 1;
+            constexpr float SPREAD = 0.0f;
+            constexpr float BULLET_SPEED = 8.0f;
+            constexpr float DURATION = 10.0f;
+            constexpr float SPEED_MULTIPLIER = 1.5f;
+        }
+
+        namespace Shotgun {
+            constexpr float FIRE_RATE = 0.8f;
+            constexpr int BULLET_COUNT = 5;
+            constexpr float SPREAD = 45.0f;
+            constexpr float BULLET_SPEED = 10.0f;
+            constexpr float DURATION = 6.0f;
+            constexpr float SPEED_MULTIPLIER = 0.8f;
+        }
+
+        namespace RocketLauncher {
+            constexpr float FIRE_RATE = 2.0f;
+            constexpr int BULLET_COUNT = 1;
+            constexpr float SPREAD = 0.0f;
+            constexpr float BULLET_SPEED = 8.0f;
+            constexpr float DURATION = 10.0f;
+            constexpr float SPEED_MULTIPLIER = 0.7f;
+        }
+
+        namespace Flamethrower {
+            constexpr float FIRE_RATE = 0.1f;
+            constexpr int BULLET_COUNT = 3;
+            constexpr float SPREAD = 25.0f;
+            constexpr float BULLET_SPEED = 6.0f;
+            constexpr float DURATION = 8.0f;
+            constexpr float SPEED_MULTIPLIER = 0.9f;
+        }
+
+        namespace Default {
+            constexpr float FIRE_RATE = 0.2f;
+            constexpr int BULLET_COUNT = 1;
+            constexpr float SPREAD = 0.0f;
+            constexpr float BULLET_SPEED = 10.0f;
+            constexpr float DURATION = 0.0f;
+            constexpr float SPEED_MULTIPLIER = 1.0f;
+        }
     }
 }
