@@ -12,6 +12,7 @@ public:
 
     void run();
     void addScene(std::shared_ptr<Scene> scene);
+    void replaceScene(size_t index, std::shared_ptr<Scene> scene);
     void setActiveScene(size_t index);
     void switchToGameOverScene(int score,float survivalTime);
     void switchToMenu();

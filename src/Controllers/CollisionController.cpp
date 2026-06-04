@@ -25,6 +25,11 @@ void CollisionController::update(float deltaTime) {
     handleBulletAsteroidCollisions();
     handleShipAsteroidCollisions();
     handleShipWeaponPickupCollisions();
+    handleShipHeartPickupCollisions();
+}
+
+void CollisionController::setHeartPickups(std::vector<std::shared_ptr<HeartPickup>>* hp) {
+    heartPickups = hp;
 }
 
 void CollisionController::setShip(std::shared_ptr<Actor> ship) {
@@ -105,15 +110,38 @@ void CollisionController::handleBulletAsteroidCollisions() {
 void CollisionController::handleShipAsteroidCollisions() {
     if (!ship || !asteroids) return;
 
+    if (isInvincible) {
+        if (invincibilityClock.getElapsedTime().asSeconds() >= INVINCIBILITY_DURATION)
+            isInvincible = false;
+        return;
+    }
+
     for (auto& asteroid : *asteroids) {
         if (!asteroid->active) continue;
 
         if (checkCollision(ship, asteroid)) {
-			AudioManager::getInstance().playSound(Constants::Audio::DEATH_SOUND_PATH);
-			AudioManager::getInstance().stopMusic();
+            isInvincible = true;
+            invincibilityClock.restart();
 
             Message msg;
-            msg.type = MessageType::GameOver;
+            msg.type = MessageType::ShipDestroyed;
+            msg.sender = this;
+            MessageBus::publish(msg);
+            break;
+        }
+    }
+}
+
+void CollisionController::handleShipHeartPickupCollisions() {
+    if (!ship || !heartPickups) return;
+
+    for (auto& heart : *heartPickups) {
+        if (!heart->active) continue;
+
+        if (checkCollision(ship, heart)) {
+            heart->active = false;
+            Message msg;
+            msg.type = MessageType::LifePickedUp;
             msg.sender = this;
             MessageBus::publish(msg);
             break;

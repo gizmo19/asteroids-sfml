@@ -17,10 +17,12 @@ void BulletController::updateMovement(float deltaTime) {
 }
 
 void BulletController::checkBounds() {
+    float w = window ? static_cast<float>(window->getSize().x) : static_cast<float>(Constants::WINDOW_WIDTH);
+    float h = window ? static_cast<float>(window->getSize().y) : static_cast<float>(Constants::WINDOW_HEIGHT);
     if (attachedActor->position.x < -Constants::BOUNDARY_OFFSET ||
-        attachedActor->position.x > Constants::WINDOW_WIDTH + Constants::BOUNDARY_OFFSET ||
+        attachedActor->position.x > w + Constants::BOUNDARY_OFFSET ||
         attachedActor->position.y < -Constants::BOUNDARY_OFFSET ||
-        attachedActor->position.y > Constants::WINDOW_HEIGHT + Constants::BOUNDARY_OFFSET) {
+        attachedActor->position.y > h + Constants::BOUNDARY_OFFSET) {
         attachedActor->active = false;
     }
 }

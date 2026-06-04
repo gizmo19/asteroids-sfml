@@ -19,7 +19,8 @@ WeaponStats WeaponSystem::getWeaponStats(WeaponType type) {
             Constants::WeaponStats::Rifle::SPREAD,
             Constants::WeaponStats::Rifle::BULLET_SPEED,
             Constants::WeaponStats::Rifle::DURATION,
-            Constants::WeaponStats::Rifle::SPEED_MULTIPLIER
+            Constants::WeaponStats::Rifle::SPEED_MULTIPLIER,
+            Constants::WeaponStats::Rifle::MAX_AMMO
         };
     case WeaponType::Revolver:
         return {
@@ -28,7 +29,8 @@ WeaponStats WeaponSystem::getWeaponStats(WeaponType type) {
             Constants::WeaponStats::Revolver::SPREAD,
             Constants::WeaponStats::Revolver::BULLET_SPEED,
             Constants::WeaponStats::Revolver::DURATION,
-            Constants::WeaponStats::Revolver::SPEED_MULTIPLIER
+            Constants::WeaponStats::Revolver::SPEED_MULTIPLIER,
+            Constants::WeaponStats::Revolver::MAX_AMMO
         };
     case WeaponType::Shotgun:
         return {
@@ -37,7 +39,8 @@ WeaponStats WeaponSystem::getWeaponStats(WeaponType type) {
             Constants::WeaponStats::Shotgun::SPREAD,
             Constants::WeaponStats::Shotgun::BULLET_SPEED,
             Constants::WeaponStats::Shotgun::DURATION,
-            Constants::WeaponStats::Shotgun::SPEED_MULTIPLIER
+            Constants::WeaponStats::Shotgun::SPEED_MULTIPLIER,
+            Constants::WeaponStats::Shotgun::MAX_AMMO
         };
     case WeaponType::RocketLauncher:
         return {
@@ -46,7 +49,8 @@ WeaponStats WeaponSystem::getWeaponStats(WeaponType type) {
             Constants::WeaponStats::RocketLauncher::SPREAD,
             Constants::WeaponStats::RocketLauncher::BULLET_SPEED,
             Constants::WeaponStats::RocketLauncher::DURATION,
-            Constants::WeaponStats::RocketLauncher::SPEED_MULTIPLIER
+            Constants::WeaponStats::RocketLauncher::SPEED_MULTIPLIER,
+            Constants::WeaponStats::RocketLauncher::MAX_AMMO
         };
     case WeaponType::Flamethrower:
         return {
@@ -55,7 +59,8 @@ WeaponStats WeaponSystem::getWeaponStats(WeaponType type) {
             Constants::WeaponStats::Flamethrower::SPREAD,
             Constants::WeaponStats::Flamethrower::BULLET_SPEED,
             Constants::WeaponStats::Flamethrower::DURATION,
-            Constants::WeaponStats::Flamethrower::SPEED_MULTIPLIER
+            Constants::WeaponStats::Flamethrower::SPEED_MULTIPLIER,
+            Constants::WeaponStats::Flamethrower::MAX_AMMO
         };
     default:
         return {
@@ -64,7 +69,8 @@ WeaponStats WeaponSystem::getWeaponStats(WeaponType type) {
             Constants::WeaponStats::Default::SPREAD,
             Constants::WeaponStats::Default::BULLET_SPEED,
             Constants::WeaponStats::Default::DURATION,
-            Constants::WeaponStats::Default::SPEED_MULTIPLIER
+            Constants::WeaponStats::Default::SPEED_MULTIPLIER,
+            Constants::WeaponStats::Default::MAX_AMMO
         };
     }
 }
