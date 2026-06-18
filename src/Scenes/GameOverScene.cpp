@@ -43,16 +43,6 @@ void GameOverScene::initialize() {
         height / 2.0f + height * 0.167f
     ));
 
-    creditsText = sf::Text(font, "by Dawid Nachlik & Mateusz Hajduczek", 32);
-    creditsText.setFillColor(sf::Color::White);
-    creditsText.setOutlineColor(sf::Color::Black);
-    creditsText.setOutlineThickness(2);
-    sf::FloatRect creditsBounds = creditsText.getLocalBounds();
-    creditsText.setPosition(sf::Vector2f(
-        (width - creditsBounds.size.x) / 2.0f,
-        height - 100.0f
-    ));
-
     promptText = sf::Text(font, "Press any key to return to menu", 36);
     promptText.setFillColor(sf::Color(200, 200, 200));
     promptText.setOutlineColor(sf::Color::Black);
