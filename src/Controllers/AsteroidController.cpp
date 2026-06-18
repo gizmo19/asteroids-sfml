@@ -19,8 +19,10 @@ void AsteroidController::updateMovement(float deltaTime) {
 }
 
 void AsteroidController::wrapPosition() {
-    if (attachedActor->position.y - attachedActor->radius > 1200) {
+    float w = window ? static_cast<float>(window->getSize().x) : 1600.0f;
+    float h = window ? static_cast<float>(window->getSize().y) : 1200.0f;
+    if (attachedActor->position.y - attachedActor->radius > h) {
         attachedActor->position.y = -attachedActor->radius;
-        attachedActor->position.x = static_cast<float>(std::rand() % (1600 - 40) + 20);
+        attachedActor->position.x = static_cast<float>(std::rand() % (static_cast<int>(w) - 40) + 20);
     }
 }

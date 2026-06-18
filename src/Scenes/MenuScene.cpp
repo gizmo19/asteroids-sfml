@@ -1,6 +1,7 @@
 #include "../../include/Scenes/MenuScene.hpp"
 #include "../../include/Core/Core.hpp"
 #include "../../include/Scenes/GameplayScene.hpp"
+#include "../../include/Utils/MessageBus.hpp"
 #include <SFML/Window/Keyboard.hpp>
 
 MenuScene::MenuScene(Core* core) : core(core) {}
@@ -10,11 +11,14 @@ void MenuScene::initialize() {
         return;
     }
 
+    float winW = static_cast<float>(window->getSize().x);
+    float winH = static_cast<float>(window->getSize().y);
+
     backgroundTexture.loadFromFile("assets/images/background.png");
     backgroundSprite = std::make_unique<sf::Sprite>(backgroundTexture);
     backgroundSprite->setScale(sf::Vector2f{
-        1600.0f / static_cast<float>(backgroundTexture.getSize().x),
-        1200.0f / static_cast<float>(backgroundTexture.getSize().y)
+        winW / static_cast<float>(backgroundTexture.getSize().x),
+        winH / static_cast<float>(backgroundTexture.getSize().y)
         });
 
     titleText = std::make_unique<sf::Text>(font);
@@ -24,7 +28,7 @@ void MenuScene::initialize() {
     titleText->setOutlineColor(sf::Color::Black);
     titleText->setOutlineThickness(3);
     sf::FloatRect titleBounds = titleText->getLocalBounds();
-    titleText->setPosition(sf::Vector2f{ 800.0f - titleBounds.size.x / 2.0f, 300.0f });
+    titleText->setPosition(sf::Vector2f{ winW / 2.0f - titleBounds.size.x / 2.0f, winH * 0.25f });
 
     startText = std::make_unique<sf::Text>(font);
     startText->setString("Press SPACE to Start");
@@ -33,15 +37,16 @@ void MenuScene::initialize() {
     startText->setOutlineColor(sf::Color::Black);
     startText->setOutlineThickness(2);
     sf::FloatRect startBounds = startText->getLocalBounds();
-    startText->setPosition(sf::Vector2f{ 800.0f - startBounds.size.x / 2.0f, 600.0f });
+    startText->setPosition(sf::Vector2f{ winW / 2.0f - startBounds.size.x / 2.0f, winH * 0.5f });
 }
 
 void MenuScene::update(float deltaTime) {
     Scene::update(deltaTime);
 
     if (isStartPressed()) {
+        MessageBus::clear();
         auto gameplayScene = std::make_shared<GameplayScene>(core, &core->getWindow());
-        core->addScene(gameplayScene);
+        core->replaceScene(1, gameplayScene);
         core->setActiveScene(1);
         core->startGameTimer();
     }

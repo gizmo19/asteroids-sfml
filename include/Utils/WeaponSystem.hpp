@@ -11,6 +11,7 @@ struct WeaponStats {
     float bulletSpeed;
     float duration;
     float speedMultiplier;
+    int maxAmmo;
 };
 
 struct WeaponRarityItem {

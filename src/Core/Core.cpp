@@ -2,7 +2,7 @@
 #include "../../include/Scenes/Scene.hpp"
 #include "../../include/Scenes/GameOverScene.hpp"
 
-Core::Core() : window(sf::VideoMode({ 1600, 1200 }), "Asteroids SFML"), deltaTime(0.0f) {
+Core::Core() : window(sf::VideoMode::getDesktopMode(), "Asteroids SFML"), deltaTime(0.0f) {
     window.setFramerateLimit(60);
 }
 
@@ -41,6 +41,15 @@ void Core::stopGameTimer() {
     }
 }
 
+void Core::replaceScene(size_t index, std::shared_ptr<Scene> scene) {
+    scene->setWindow(&window);
+    if (index < scenes.size()) {
+        scenes[index] = scene;
+    } else {
+        scenes.push_back(scene);
+    }
+}
+
 void Core::addScene(std::shared_ptr<Scene> scene) {
     scenes.push_back(scene);
     scene->setWindow(&window);
@@ -71,6 +80,10 @@ void Core::handleEvents() {
         if (event->is<sf::Event::Closed>()) {
             window.close();
         }
+        if (const auto* resized = event->getIf<sf::Event::Resized>()) {
+            sf::FloatRect visibleArea(sf::Vector2f(0.0f, 0.0f), sf::Vector2f(resized->size));
+            window.setView(sf::View(visibleArea));
+        }
     }
 }
 
@@ -90,7 +103,7 @@ void Core::render() {
     window.display();
 }
 void Core::switchToGameOverScene(int score, float survivalTime) {
-    auto gameOverScene = std::make_shared<GameOverScene>(&window, score, survivalTime);
+    auto gameOverScene = std::make_shared<GameOverScene>(&window, this, score, survivalTime);
     activeScene = gameOverScene;
     activeScene->setWindow(&window);
     activeScene->initialize();

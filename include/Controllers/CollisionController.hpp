@@ -2,6 +2,8 @@
 #include "Controller.hpp"
 #include "../Actors/Actor.hpp"
 #include "../Actors/WeaponPickup.hpp"
+#include "../Actors/HeartPickup.hpp"
+#include <SFML/System/Clock.hpp>
 #include <vector>
 #include <memory>
 
@@ -14,15 +16,22 @@ public:
     void setBullets(std::vector<std::shared_ptr<Actor>>* bullets);
     void setAsteroids(std::vector<std::shared_ptr<Actor>>* asteroids);
     void setWeaponPickups(std::vector<std::shared_ptr<WeaponPickup>>* weaponPickups);
+    void setHeartPickups(std::vector<std::shared_ptr<HeartPickup>>* heartPickups);
 
 private:
     std::shared_ptr<Actor> ship;
     std::vector<std::shared_ptr<Actor>>* bullets;
     std::vector<std::shared_ptr<Actor>>* asteroids;
     std::vector<std::shared_ptr<WeaponPickup>>* weaponPickups;
+    std::vector<std::shared_ptr<HeartPickup>>* heartPickups = nullptr;
+
+    sf::Clock invincibilityClock;
+    bool isInvincible = false;
+    static constexpr float INVINCIBILITY_DURATION = 2.0f;
 
     bool checkCollision(std::shared_ptr<Actor> a, std::shared_ptr<Actor> b);
     void handleBulletAsteroidCollisions();
     void handleShipAsteroidCollisions();
     void handleShipWeaponPickupCollisions();
+    void handleShipHeartPickupCollisions();
 };

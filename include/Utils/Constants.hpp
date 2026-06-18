@@ -36,6 +36,7 @@ namespace Constants {
 
     // Weapon Pickup
     constexpr float WEAPON_SPAWN_INTERVAL = 10.0f;
+    constexpr float HEART_SPAWN_INTERVAL = 25.0f;
     constexpr float WEAPON_SCALE = 2.0f;
     constexpr int WEAPON_SPAWN_MARGIN = 50;
     constexpr int WEAPON_SPAWN_HEIGHT_MIN = 100;
@@ -116,6 +117,7 @@ namespace Constants {
             constexpr float BULLET_SPEED = 12.0f;
             constexpr float DURATION = 8.0f;
             constexpr float SPEED_MULTIPLIER = 1.0f;
+            constexpr int MAX_AMMO = 30;
         }
 
         namespace Revolver {
@@ -125,6 +127,7 @@ namespace Constants {
             constexpr float BULLET_SPEED = 8.0f;
             constexpr float DURATION = 10.0f;
             constexpr float SPEED_MULTIPLIER = 1.5f;
+            constexpr int MAX_AMMO = 6;
         }
 
         namespace Shotgun {
@@ -134,6 +137,7 @@ namespace Constants {
             constexpr float BULLET_SPEED = 10.0f;
             constexpr float DURATION = 6.0f;
             constexpr float SPEED_MULTIPLIER = 0.8f;
+            constexpr int MAX_AMMO = 8;
         }
 
         namespace RocketLauncher {
@@ -143,6 +147,7 @@ namespace Constants {
             constexpr float BULLET_SPEED = 8.0f;
             constexpr float DURATION = 10.0f;
             constexpr float SPEED_MULTIPLIER = 0.7f;
+            constexpr int MAX_AMMO = 5;
         }
 
         namespace Flamethrower {
@@ -152,6 +157,7 @@ namespace Constants {
             constexpr float BULLET_SPEED = 6.0f;
             constexpr float DURATION = 8.0f;
             constexpr float SPEED_MULTIPLIER = 0.9f;
+            constexpr int MAX_AMMO = 40;
         }
 
         namespace Default {
@@ -161,6 +167,8 @@ namespace Constants {
             constexpr float BULLET_SPEED = 10.0f;
             constexpr float DURATION = 0.0f;
             constexpr float SPEED_MULTIPLIER = 1.0f;
+            constexpr int MAX_AMMO = 15;
+            constexpr float RELOAD_TIME = 2.0f;
         }
     }
 }

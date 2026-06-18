@@ -1,10 +1,14 @@
 #include "../../include/Controllers/ShipController.hpp"
 #include "../../include/Actors/Actor.hpp"
 #include "../../include/Utils/MessageBus.hpp"
+#include "../../include/Utils/Constants.hpp"
 #include <cmath>
 
 ShipController::ShipController() : acceleration(0.4f), friction(0.92f),
 maxSpeed(12.0f), canShoot(true), window(nullptr), currentWeapon(WeaponType::Default), weaponDuration(0.0f) {
+
+    currentAmmo = Constants::WeaponStats::Default::MAX_AMMO;
+    maxAmmo = Constants::WeaponStats::Default::MAX_AMMO;
 
     MessageBus::subscribe(MessageType::WeaponPickedUp, [this](const Message& msg) {
         WeaponType weaponType = std::any_cast<WeaponType>(msg.payload);
@@ -73,7 +77,7 @@ void ShipController::updateMovement(float deltaTime) {
 }
 
 void ShipController::handleShooting() {
-    bool shootPressed = sf::Mouse::isButtonPressed(sf::Mouse::Button::Left) || sf::Keyboard::isKeyPressed(sf::Keyboard::Scan::Space);
+    bool shootPressed = sf::Mouse::isButtonPressed(sf::Mouse::Button::Left) || sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Space);
     if (shootPressed) {
         if (canShoot) {
             fireWeapon();
@@ -85,10 +89,20 @@ void ShipController::handleShooting() {
 }
 
 void ShipController::updateWeapon(float deltaTime) {
+    if (isReloading) {
+        if (reloadClock.getElapsedTime().asSeconds() >= Constants::WeaponStats::Default::RELOAD_TIME) {
+            isReloading = false;
+            currentAmmo = Constants::WeaponStats::Default::MAX_AMMO;
+        }
+        return;
+    }
+
     if (currentWeapon != WeaponType::Default && weaponDuration > 0.0f) {
         weaponDuration -= deltaTime;
         if (weaponDuration <= 0.0f) {
             currentWeapon = WeaponType::Default;
+            currentAmmo = Constants::WeaponStats::Default::MAX_AMMO;
+            maxAmmo = Constants::WeaponStats::Default::MAX_AMMO;
             Message msg;
             msg.type = MessageType::WeaponExpired;
             msg.sender = this;
@@ -97,7 +111,14 @@ void ShipController::updateWeapon(float deltaTime) {
     }
 }
 
+float ShipController::getReloadProgress() const {
+    if (!isReloading) return 1.0f;
+    return std::min(1.0f, reloadClock.getElapsedTime().asSeconds() / Constants::WeaponStats::Default::RELOAD_TIME);
+}
+
 void ShipController::fireWeapon() {
+    if (isReloading) return;
+
     WeaponStats stats = WeaponSystem::getWeaponStats(currentWeapon);
 
     if (shootClock.getElapsedTime().asSeconds() < stats.fireRate) {
@@ -146,33 +167,57 @@ void ShipController::fireWeapon() {
         msg.payload = data;
         MessageBus::publish(msg);
     }
+
+    if (maxAmmo > 0) {
+        currentAmmo--;
+        if (currentAmmo <= 0) {
+            currentAmmo = 0;
+            if (currentWeapon == WeaponType::Default) {
+                isReloading = true;
+                reloadClock.restart();
+            } else {
+                currentWeapon = WeaponType::Default;
+                currentAmmo = Constants::WeaponStats::Default::MAX_AMMO;
+                maxAmmo = Constants::WeaponStats::Default::MAX_AMMO;
+                Message expMsg;
+                expMsg.type = MessageType::WeaponExpired;
+                expMsg.sender = this;
+                MessageBus::publish(expMsg);
+            }
+        }
+    }
 }
 
 void ShipController::setWeapon(WeaponType type) {
     currentWeapon = type;
     WeaponStats stats = WeaponSystem::getWeaponStats(type);
     weaponDuration = stats.duration;
+    currentAmmo = stats.maxAmmo;
+    maxAmmo = stats.maxAmmo;
+    isReloading = false;
     weaponClock.restart();
 }
 
 void ShipController::constrainToBounds() {
     const float BOUNDS_MARGIN = 20.0f;
     const float BOUNCE_FACTOR = 0.3f;
+    float w = window ? static_cast<float>(window->getSize().x) : 1600.0f;
+    float h = window ? static_cast<float>(window->getSize().y) : 1200.0f;
 
     if (attachedActor->position.x < BOUNDS_MARGIN) {
         attachedActor->position.x = BOUNDS_MARGIN;
         attachedActor->velocity.x = std::abs(attachedActor->velocity.x) * BOUNCE_FACTOR;
     }
-    if (attachedActor->position.x > 1600 - BOUNDS_MARGIN) {
-        attachedActor->position.x = 1600 - BOUNDS_MARGIN;
+    if (attachedActor->position.x > w - BOUNDS_MARGIN) {
+        attachedActor->position.x = w - BOUNDS_MARGIN;
         attachedActor->velocity.x = -std::abs(attachedActor->velocity.x) * BOUNCE_FACTOR;
     }
     if (attachedActor->position.y < BOUNDS_MARGIN) {
         attachedActor->position.y = BOUNDS_MARGIN;
         attachedActor->velocity.y = std::abs(attachedActor->velocity.y) * BOUNCE_FACTOR;
     }
-    if (attachedActor->position.y > 1200 - BOUNDS_MARGIN) {
-        attachedActor->position.y = 1200 - BOUNDS_MARGIN;
+    if (attachedActor->position.y > h - BOUNDS_MARGIN) {
+        attachedActor->position.y = h - BOUNDS_MARGIN;
         attachedActor->velocity.y = -std::abs(attachedActor->velocity.y) * BOUNCE_FACTOR;
     }
 }

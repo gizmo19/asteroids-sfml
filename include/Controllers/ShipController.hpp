@@ -15,6 +15,10 @@ public:
     float getWeaponTimeLeft() const;
     float getWeaponTotalTime() const;
     WeaponType getCurrentWeaponType() const;
+    int getCurrentAmmo() const { return currentAmmo; }
+    int getMaxAmmo() const { return maxAmmo; }
+    bool getIsReloading() const { return isReloading; }
+    float getReloadProgress() const;
 
 private:
     sf::RenderWindow* window;
@@ -27,6 +31,10 @@ private:
     WeaponType currentWeapon;
     sf::Clock weaponClock;
     float weaponDuration;
+    int currentAmmo = 0;
+    int maxAmmo = 0;
+    bool isReloading = false;
+    sf::Clock reloadClock;
 
     void handleInput();
     void handleMouseRotation();

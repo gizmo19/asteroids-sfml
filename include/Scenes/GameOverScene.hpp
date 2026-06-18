@@ -1,10 +1,13 @@
 #pragma once
 #include "Scene.hpp"
 #include <SFML/Graphics.hpp>
+#include <SFML/System/Clock.hpp>
+
+class Core;
 
 class GameOverScene : public Scene {
 public:
-    GameOverScene(sf::RenderWindow* window, int score, float survivalTime);
+    GameOverScene(sf::RenderWindow* window, Core* core, int score, float survivalTime);
     void initialize() override;
     void update(float deltaTime) override;
     void render(sf::RenderWindow& window) override;
@@ -18,4 +21,7 @@ private:
     sf::Text creditsText;
     sf::Text timerText;
     sf::RenderWindow* gameWindow;
+    Core* core;
+    sf::Clock delayClock;
+    sf::Text promptText;
 };

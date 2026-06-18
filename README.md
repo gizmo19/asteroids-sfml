@@ -2,7 +2,9 @@
 
 ## Autorzy
 - Mateusz Hajduczek
-- Dawid Nachlik
+- Mateusz Sment
+- Kamil Kuczera
+- Kamil Czupryński
 
 ## Opis Projektu
 Asteroids SFML to nowoczesna implementacja klasycznej gry Asteroids, stworzona przy użyciu biblioteki SFML. Projekt wykorzystuje architekturę Scene-Controller-Actor z systemem komunikacji między obiektami (MessageBus), co zapewnia modularność i łatwość rozbudowy.
